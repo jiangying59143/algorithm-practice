@@ -137,6 +137,50 @@ public class Sort {
         }
     }
 
+    public static void RadixSort(int[] arr){
+
+    }
+
+    public static int getMaxBit(int[] arr){
+        int max = Integer.MIN_VALUE;
+        for (int i : arr) {
+            max = Math.max(max, i);
+        }
+        int res = 0;
+        while(max != 0){
+            res++;
+            max /=10;
+        }
+        return res;
+    }
+
+    public static void processRadix(int[] arr, int bit){
+        int buckets[] = new int[10];
+        int[] help = new int[arr.length];
+        for (int b = 1; b <= bit; b++) {
+            for (int i = 0; i < arr.length; i++) {
+                buckets[getBitNumber(arr[i], b)]++;
+            }
+            for (int i = 1; i < buckets.length; i++) {
+                buckets[i] += buckets[i-1];
+            }
+            for (int j = arr.length-1; j >= 0; j--) {
+                help[buckets[getBitNumber(arr[j], b)]-- -1] = arr[j];
+            }
+            for (int i = 0; i < help.length; i++) {
+                arr[i] = help[i];
+            }
+
+            for (int i = 0; i < buckets.length; i++) {
+                buckets[i] = 0;
+            }
+        }
+    }
+
+    public static int getBitNumber(int x, int b){
+        return x / (int)Math.pow(10, b-1) % 10;
+    }
+
 
     public static void swap(int[] arr, int i, int j){
         arr[i] = arr[i] ^ arr[j];
