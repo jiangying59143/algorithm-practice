@@ -5,15 +5,15 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class Code01_FS {
-    public static void BFS(GraphNode head){
-        LinkedList<GraphNode> queue = new LinkedList<>();
-        Set<GraphNode> set = new HashSet<>();
+    public static void BFS(Node head){
+        LinkedList<Node> queue = new LinkedList<>();
+        Set<Node> set = new HashSet<>();
         queue.add(head);
         set.add(head);
         while(!queue.isEmpty()){
-            GraphNode node = queue.poll();
+            Node node = queue.poll();
             System.out.println(node.value);
-            for (GraphNode next : node.nexts) {
+            for (Node next : node.nexts) {
                 if(!set.contains(next)){
                     queue.add(next);
                     set.add(next);
@@ -22,15 +22,15 @@ public class Code01_FS {
         }
     }
 
-    public static void DFS(GraphNode head){
-        LinkedList<GraphNode> stack = new LinkedList<>();
-        Set<GraphNode> set = new HashSet<>();
+    public static void DFS(Node head){
+        LinkedList<Node> stack = new LinkedList<>();
+        Set<Node> set = new HashSet<>();
         stack.push(head);
         set.add(head);
         System.out.println(head.value);
         while(!stack.isEmpty()){
-            GraphNode node  = stack.pop();
-            for (GraphNode next : node.nexts) {
+            Node node  = stack.pop();
+            for (Node next : node.nexts) {
                 if(!set.contains(next)){
                     set.add(next);
                     stack.push(node);
@@ -42,15 +42,15 @@ public class Code01_FS {
         }
     }
 
-    public static void DFS_R(GraphNode head){
+    public static void DFS_R(Node head){
         processDfs(head, new HashSet<>());
     }
 
 
-    public static void processDfs(GraphNode node, Set<GraphNode> set){
+    public static void processDfs(Node node, Set<Node> set){
         set.add(node);
         System.out.println(node.value);
-        for (GraphNode next : node.nexts) {
+        for (Node next : node.nexts) {
             if(!set.contains(next)) {
                 processDfs(next, set);
             }
@@ -59,13 +59,13 @@ public class Code01_FS {
     }
 
     public static void main(String[] args) {
-        GraphNode graphNode = GraphNode.generateRandomNode();
+        Node node = Node.generateRandomNode();
         System.out.println("BFS");
-        BFS(graphNode);
+        BFS(node);
         System.out.println("-------------");
         System.out.println("DFS");
-        DFS(graphNode);
+        DFS(node);
         System.out.println("-------------");
-        DFS_R(graphNode);
+        DFS_R(node);
     }
 }

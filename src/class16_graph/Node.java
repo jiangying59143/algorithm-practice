@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GraphNode {
+public class Node {
     public int value;
-    public List<GraphNode> nexts;
+    public List<Node> nexts;
+    public List<Edge> edges;
 
-    public GraphNode(int value) {
+    public Node(int value) {
         this.value = value;
         nexts = new ArrayList<>();
+        edges = new ArrayList<>();
     }
 
-    public static GraphNode generateRandomNode(){
-        GraphNode graphNode = new GraphNode(0);
-        GraphNode graphNode1 = new GraphNode(1);
-        GraphNode graphNode2 = new GraphNode(2);
-        GraphNode graphNode3 = new GraphNode(3);
-        GraphNode graphNode4 = new GraphNode(4);
-        GraphNode graphNode5 = new GraphNode(5);
+    public static Node generateRandomNode(){
+        Node graphNode = new Node(0);
+        Node graphNode1 = new Node(1);
+        Node graphNode2 = new Node(2);
+        Node graphNode3 = new Node(3);
+        Node graphNode4 = new Node(4);
+        Node graphNode5 = new Node(5);
 
         graphNode.nexts.addAll(Arrays.asList(graphNode1, graphNode2, graphNode3));
         graphNode1.nexts.add(graphNode);
