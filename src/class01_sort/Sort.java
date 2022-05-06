@@ -1,11 +1,16 @@
 package class01_sort;
 
+import common.MyGenerator;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+
 public class Sort {
-    public static void Bubble(int[] arr){
+    public static void bubble(int[] arr){
         for (int i = arr.length - 1; i >= 0; i--) {
             for(int j=0; j < i; j++){
                 if(arr[j] > arr[j+1]){
-                    swap(arr, j, j+1);
+                    swap2(arr, j, j+1);
                 }
             }
         }
@@ -24,7 +29,7 @@ public class Sort {
     public static void insertSort(int[] arr){
         for (int i = 1; i < arr.length; i++) {
             for (int j = i-1; j >= 0 && arr[j] > arr[j+1]; j--) {
-                swap(arr, j, j+1);
+                swap2(arr, j, j+1);
             }
         }
     }
@@ -76,15 +81,40 @@ public class Sort {
         processQuick(arr, 0, arr.length - 1);
     }
 
-    public static void processQuick(int[] arr, int L, int R){
+    public static void quickSort2(int[] arr){
+        int L = 0, R=arr.length-1;
         int partition = L + (int)Math.random()*(R-L+1);
-        swap(arr, partition, R);
-        int[] equArea = equalArea(arr, L, R);
+        swap2(arr, partition, R);
+        int[] equArea = nertherlandFlag(arr, L, R);
+        LinkedList<int[]> stack = new LinkedList<>();
+        stack.push(new int[]{equArea[1]+1, R});
+        stack.push(new int[]{L, equArea[0]-1});
+        while(!stack.isEmpty()){
+            int[] part = stack.pop();
+            if(part[0] < part[1]) {
+                partition = part[0] + (int) Math.random() * (part[1] - part[0] + 1);
+                swap2(arr, partition, part[1]);
+                equArea = nertherlandFlag(arr, part[0], part[1]);
+                stack.push(new int[]{equArea[1] + 1, part[1]});
+                stack.push(new int[]{part[0], equArea[0] - 1});
+            }
+        }
+    }
+
+    public static void processQuick(int[] arr, int L, int R){
+        if(L>=R){
+            return;
+        }
+        int partition = L + (int)Math.random()*(R-L+1);
+        swap2(arr, partition, R);
+        int[] equArea = nertherlandFlag(arr, L, R);
         processQuick(arr, L, equArea[0]-1);
         processQuick(arr, equArea[1]+1, R);
     }
 
-    public static int[] equalArea(int[] arr, int L, int R){
+
+
+    public static int[] nertherlandFlag(int[] arr, int L, int R){
         if(L>R){
             return new int[]{-1,-1};
         }
@@ -98,12 +128,12 @@ public class Sort {
             if(arr[index]==arr[R]){
                 index ++;
             }else if(arr[index] < arr[R]){
-                swap(arr, ++lessIndex, index++);
+                swap2(arr, ++lessIndex, index++);
             }else{
-                swap(arr, index, --moreIndex);
+                swap2(arr, index, --moreIndex);
             }
         }
-        swap(arr, moreIndex, R);
+        swap2(arr, moreIndex, R);
         return new int[]{lessIndex+1, moreIndex};
     }
 
@@ -138,7 +168,7 @@ public class Sort {
     }
 
     public static void RadixSort(int[] arr){
-
+        processRadix(arr, getMaxBit(arr));
     }
 
     public static int getMaxBit(int[] arr){
@@ -194,5 +224,29 @@ public class Sort {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int times = 10000;
+        while(times -- > 0){
+            int[] arr = MyGenerator.generateRandomArr(100);
+            int[] arr2 = Arrays.copyOf(arr, arr.length);
+            int[] arr3 = Arrays.copyOf(arr, arr.length);
+            bubble(arr);
+            quickSort2(arr2);
+            for (int i = 0; i < arr.length; i++) {
+                if(arr[i] != arr2[i]){
+                    System.out.println("Oops!");
+                    System.out.println(Arrays.toString(arr3));
+                    System.out.println("---bubble sort---");
+                    System.out.println(Arrays.toString(arr));
+                    System.out.println("---quick sort---");
+                    System.out.println(Arrays.toString(arr2));
+
+                    return;
+                }
+            }
+        }
+        System.out.println("finished");
     }
 }
