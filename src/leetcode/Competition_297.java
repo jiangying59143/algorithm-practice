@@ -42,19 +42,48 @@ public class Competition_297 {
     }
 
     public int minPathCost(int[][] grid, int[][] moveCost) {
-        int ans = 0;
-        for (int i = 0; i < grid.length; i++) {
-            
+        int[][] resArr = new int[grid.length][grid[0].length+1];
+        for (int i = 0; i < resArr.length; i++) {
+            for (int j = 0; j < resArr.length; j++) {
+                resArr[i][j] = -1;
+            }
         }
-        return 0;
+        return processMinPathCost(grid, moveCost, grid.length-1,  0, resArr);
+    }
+
+    public int processMinPathCost(int[][] grid, int[][] moveCost, int rowIndex,  int columnIndex, int[][] resArr){
+        if(resArr[rowIndex][columnIndex] != -1){
+            return resArr[rowIndex][columnIndex];
+        }
+        if(rowIndex == 0){
+            resArr[rowIndex][columnIndex] = 0;
+            return 0;
+        }
+        if(columnIndex == grid[0].length){
+            resArr[rowIndex][columnIndex] = 0;
+            return 0;
+        }
+        int ans = 0;
+        for (int k = 0; k < grid[0].length; k++) {
+            ans = Math.min( ans,grid[rowIndex-1][k] + moveCost[grid[rowIndex-1][k]][columnIndex] + processMinPathCost(grid, moveCost, rowIndex-1, k, resArr));
+        }
+
+        int res = Math.min(grid[rowIndex][columnIndex] + ans, processMinPathCost(grid, moveCost, rowIndex, columnIndex+1, resArr));
+        resArr[rowIndex][columnIndex] = res;
+        return res;
+
     }
 
     public static void main(String[] args) {
-        int[][] brackets = new int[3][];
-        brackets[0] = new int[]{1,0};
-        brackets[1] = new int[]{4,25};
-        brackets[2] = new int[]{5,50};
-        System.out.println(new Competition_297().calculateTax(brackets,2));
+        Competition_297 obj = new Competition_297();
+//        int[][] brackets = new int[3][];
+//        brackets[0] = new int[]{1,0};
+//        brackets[1] = new int[]{4,25};
+//        brackets[2] = new int[]{5,50};
+//        System.out.println(obj.calculateTax(brackets,2));
 
+        int[][] grid = new int[][]{{5,3},{4,0},{2,1}};
+        int[][] moveCost = new int[][]{{9,8},{1,5},{10,12},{18,6},{2,4},{14,3}};
+        System.out.println(obj.minPathCost(grid, moveCost));
     }
 }
