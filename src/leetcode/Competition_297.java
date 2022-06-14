@@ -63,12 +63,12 @@ public class Competition_297 {
             resArr[rowIndex][columnIndex] = 0;
             return 0;
         }
-        int ans = 0;
+        int ans = Integer.MAX_VALUE;
         for (int k = 0; k < grid[0].length; k++) {
             ans = Math.min( ans,grid[rowIndex-1][k] + moveCost[grid[rowIndex-1][k]][columnIndex] + processMinPathCost(grid, moveCost, rowIndex-1, k, resArr));
         }
 
-        int res = Math.min(grid[rowIndex][columnIndex] + ans, processMinPathCost(grid, moveCost, rowIndex, columnIndex+1, resArr));
+        int res = Math.min(grid[rowIndex][columnIndex] + ans, grid[rowIndex][columnIndex+1] + processMinPathCost(grid, moveCost, rowIndex, columnIndex+1, resArr));
         resArr[rowIndex][columnIndex] = res;
         return res;
 
