@@ -48,9 +48,6 @@ public class Competition_297 {
         for (int i = 0; i < grid[grid.length-1].length; i++) {
             ans = Math.min(ans, processMinPathCost(grid, moveCost, grid.length-1, i, resArr));
         }
-        for (int[] ints : resArr) {
-            System.out.println(Arrays.toString(ints));
-        }
         return ans;
     }
 
@@ -72,10 +69,7 @@ public class Competition_297 {
     }
 
     public int minPathCost2(int[][] grid, int[][] moveCost) {
-        int[] resArr = new int[grid[0].length];
-        for (int i = 0; i < resArr.length; i++) {
-            resArr[i] = grid[0][i];
-        }
+        int[] resArr = grid[0];
         int[] tempArr = new int[grid[0].length];
         for (int rowIndex = 1; rowIndex < grid.length; rowIndex++) {
             for (int columnIndex = 0; columnIndex < resArr.length; columnIndex++) {
@@ -87,10 +81,7 @@ public class Competition_297 {
                 }
                 tempArr[columnIndex] += grid[rowIndex][columnIndex];
             }
-            System.out.println(Arrays.toString(tempArr));
-            for (int i = 0; i < resArr.length; i++) {
-                resArr[i] = tempArr[i];
-            }
+            resArr = Arrays.copyOf(tempArr, tempArr.length);
         }
 
         int ans = resArr[0];
