@@ -1,5 +1,6 @@
 package class25_slideWindow;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -18,7 +19,7 @@ public class Solution {
         LinkedList<Integer> deque = new LinkedList<>();
         int L=0;
         for (int R = 0; R < nums.length; R++) {
-            while(!deque.isEmpty() && nums[deque.peekLast()] >= nums[R]){
+            while(!deque.isEmpty() && nums[deque.peekLast()] <= nums[R]){
                 deque.pollLast();
             }
             deque.addLast(R);
@@ -29,10 +30,16 @@ public class Solution {
 
             // 窗口形成后
             if(R>=k-1){
-                ans[L++] = deque.pollLast();
+                ans[L++] = nums[deque.peekFirst()];
             }
         }
 
         return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution obj = new Solution();
+        int[] nums = new int[]{1,3,-1,-3,5,3,6,7};
+        System.out.println(Arrays.toString(obj.maxSlidingWindow(nums, 3)));
     }
 }
