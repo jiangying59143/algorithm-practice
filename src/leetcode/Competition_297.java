@@ -124,6 +124,39 @@ public class Competition_297 {
         }
     }
 
+
+    public int distributeCookies1(int[] cookies, int k) {
+        int[] childCookies = new int[k+1];
+        childCookies[k] = Integer.MAX_VALUE;
+        processDistribute1(cookies, childCookies, cookies.length-1);
+        return childCookies[k];
+    }
+
+    public void processDistribute1(int[] cookies, int[] childCookies, int cookieIndex){
+        if(cookieIndex < 0){
+            int everyAns = Integer.MIN_VALUE;
+            for (int i = 0; i < childCookies.length-1; i++) {
+                everyAns = Math.max(everyAns, childCookies[i]);
+            }
+            childCookies[childCookies.length-1] = Math.min(childCookies[childCookies.length-1], everyAns);
+            return;
+        }
+
+        int childrenWithoutCookie = 0;
+        for (int i = 0; i < childCookies.length-1; i++){
+            if(childCookies[i] > childCookies[childCookies.length-1]) return;
+            if(childCookies[i] == 0) childrenWithoutCookie ++;
+        }
+        if(childrenWithoutCookie > cookieIndex+1) return;
+
+        for (int i = 0; i < childCookies.length-1; i++) {
+            if(cookieIndex == cookies.length-1 && i > 0) return;
+            childCookies[i] += cookies[cookieIndex];
+            processDistribute1(cookies, childCookies, cookieIndex-1);
+            childCookies[i] -= cookies[cookieIndex];
+        }
+    }
+
     public static void main(String[] args) {
         Competition_297 obj = new Competition_297();
 //        int[][] brackets = new int[3][];

@@ -1,14 +1,18 @@
 package common;
 
 public class Test {
+    Object c, d;
     public static void main(String[] args) {
-        Integer b = 10;
-        add(10, b);
-        System.out.println(b);
+
     }
 
-    private static void add(Integer a, Integer b){
-        b = a+b;
-        System.out.println("add" + b);
+    private static void add(){
+        Object a, b, e;
+        e = new Object();
+        a = b = e;
+        e = new Object();
+        System.out.println(a.hashCode());
+        System.out.println(b.hashCode());
+        System.out.println(e.hashCode());
     }
 }
