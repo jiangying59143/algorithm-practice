@@ -8,39 +8,32 @@ import java.util.stream.Collectors;
 public class Item_47 {
     public static void main(String[] args) {
         Item_47 item_47 = new Item_47();
-        List<List<Integer>> res = item_47.permuteUnique(new int[]{0, 0, 0, 1, 9});
+//        List<List<Integer>> res = item_47.permuteUnique(new int[]{0, 0, 0, 1, 9});
+        List<List<Integer>> res = item_47.permuteUnique(new int[]{1, 1, 2, 2});
         for (int i = 0; i < res.size(); i++) {
             System.out.println(Arrays.toString(res.get(i).toArray()));
         }
+
     }
 
     public List<List<Integer>> permuteUnique(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(nums);
-        process(nums, 0, res);
+        process(nums, res, new boolean[nums.length], new ArrayList<>());
         return res;
     }
 
-    private void process(int[] nums, int swapPosition, List<List<Integer>> res){
-        if(swapPosition == nums.length){
-            res.add(Arrays.stream(nums).boxed().collect(Collectors.toList()));
+    private void process(int[] nums, List<List<Integer>> res, boolean[] visited, List<Integer> path){
+        if(path.size() == nums.length){
+            res.add(new ArrayList<>(path));
         }
-        for (int i = swapPosition; i < nums.length; i++) {
-            if(i > swapPosition && nums[swapPosition] == nums[i]) continue;
-            swap(nums, i, swapPosition);
-            if(i-swapPosition > 1) swap(nums, i-1, i);
-            process(nums, swapPosition+1, res);
-            if(i-swapPosition > 1) swap(nums, i-1, i);
-            swap(nums, i, swapPosition);
+        for (int i = 0; i < nums.length; i++) {
+            if(visited[i] || i > 0 && nums[i-1] == nums[i] && !visited[i-1]) continue;
+            visited[i]=true;
+            path.add(nums[i]);
+            process(nums, res, visited, path);
+            visited[i]=false;
+            path.remove(path.size()-1);
         }
-    }
-
-    private void swap(int[] nums, int i, int j){
-        if(i == j){
-            return;
-        }
-        nums[i] = nums[i] ^ nums[j];
-        nums[j] = nums[i] ^ nums[j];
-        nums[i] = nums[i] ^ nums[j];
     }
 }
