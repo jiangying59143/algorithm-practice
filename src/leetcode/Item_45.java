@@ -5,13 +5,21 @@ import java.util.Arrays;
 public class Item_45 {
     public static void main(String[] args) {
         Item_45 obj = new Item_45();
-//        System.out.println(obj.jump(new int[]{0}));
-//        System.out.println(obj.jump(new int[]{1}));
-//        System.out.println(obj.jump(new int[]{2,3,1,1,4}));
-//        System.out.println(obj.jump(new int[]{2,3,0,1,4}));
-//        System.out.println(obj.jump(new int[]{1,2,3}));
-//        System.out.println(obj.jump(new int[]{1,1,1,1}));
-//        System.out.println(obj.jump(new int[]{1,2,1,1,1}));
+        System.out.println(obj.jump0(new int[]{0}));
+        System.out.println(obj.jump0(new int[]{1}));
+        System.out.println(obj.jump0(new int[]{2,3,1,1,4}));
+        System.out.println(obj.jump0(new int[]{2,3,0,1,4}));
+        System.out.println(obj.jump0(new int[]{1,2,3}));
+        System.out.println(obj.jump0(new int[]{1,1,1,1}));
+        System.out.println(obj.jump0(new int[]{1,2,1,1,1}));
+        System.out.println("------------------");
+        System.out.println(obj.jump(new int[]{0}));
+        System.out.println(obj.jump(new int[]{1}));
+        System.out.println(obj.jump(new int[]{2,3,1,1,4}));
+        System.out.println(obj.jump(new int[]{2,3,0,1,4}));
+        System.out.println(obj.jump(new int[]{1,2,3}));
+        System.out.println(obj.jump(new int[]{1,1,1,1}));
+        System.out.println(obj.jump(new int[]{1,2,1,1,1}));
 //        System.out.println("------------------");
 //        System.out.println(obj.jump2(new int[]{0}));
 //        System.out.println(obj.jump2(new int[]{1}));
@@ -19,8 +27,25 @@ public class Item_45 {
 //        System.out.println(obj.jump2(new int[]{2,3,0,1,4}));
 //        System.out.println(obj.jump2(new int[]{1,2,3}));
 //        System.out.println(obj.jump2(new int[]{1,1,1,1}));
-        System.out.println(obj.jump2(new int[]{1,2,1,1,1}));
+//        System.out.println(obj.jump2(new int[]{1,2,1,1,1}));
     }
+
+    public int jump0(int[] nums) {
+        int end = 0;
+        int steps = 0;
+        int maxPosition = 0;
+
+        for (int i = 0; i < nums.length-1; i++) {
+            maxPosition = Math.max(maxPosition, i + nums[i]);
+            if(i == end){
+                end = maxPosition;
+                steps++;
+            }
+        }
+
+        return steps;
+    }
+
     public int jump(int[] nums) {
         int res = process(nums,0,0);
         return res == Integer.MAX_VALUE ? 0 : res;
