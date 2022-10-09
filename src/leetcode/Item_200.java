@@ -31,6 +31,91 @@ public class Item_200 {
                 {'0','0','0','1','1'}
         };
         System.out.println(numOfIsland2(grid));
+
+        System.out.println("---------union find-----------");
+        Solution solution = new Solution(grid);
+        grid = new char[][]{
+                {'1', '1', '1', '1', '0'},
+                {'1', '1', '0', '1', '0'},
+                {'1', '1', '0', '0', '0'},
+                {'0', '0', '0', '0', '0'}
+        };
+        System.out.println(solution.numIslands(grid));
+        grid = new char[][]{
+                {'1','1','0','0','0'},
+                {'1','1','0','0','0'},
+                {'0','0','1','0','0'},
+                {'0','0','0','1','1'}
+        };
+        System.out.println(solution.numIslands(grid));
+
+    }
+
+    static class Solution {
+        int[] path;
+        int[] pathSize;
+        public int count;
+        public Solution(char[][] grid){
+            path = new int[grid.length * grid[0].length];
+            pathSize = new int[grid.length * grid[0].length];
+            for (int i = 0; i < path.length; i++) {
+                path[i] = i;
+            }
+            for (int i = 0; i < pathSize.length; i++) {
+                pathSize[i] = 1;
+            }
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if(grid[i][j] == '1'){
+                        count++;
+                    }
+                }
+            }
+        }
+
+        public int findParent(int p){
+            int[] stack = new int[path.length];
+            int stackSize = 0;
+            while(path[p] != p){
+                p = path[p];
+                stack[stackSize++] = p;
+            }
+
+            while(stackSize > 0){
+                path[stack[--stackSize]] = p;
+            }
+
+            return p;
+        }
+
+        public void union(int a, int b){
+            int aParent = findParent(a);
+            int bParent = findParent(b);
+            if(aParent == bParent){
+                return;
+            }
+            count--;
+            if(pathSize[aParent] > pathSize[bParent]){
+                path[bParent] = aParent;
+                pathSize[aParent] += pathSize[bParent];
+            }else{
+                path[aParent] = bParent;
+                pathSize[bParent] += pathSize[aParent];
+            }
+        }
+
+        public int numIslands(char[][] grid) {
+            Solution obj = new Solution(grid);
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if(grid[i][j] == '1'){
+                        if(i>0 && grid[i-1][j] == '1') obj.union(i*grid[0].length+j, (i-1)*grid[0].length+j);
+                        if(j>0 && grid[i][j-1] == '1') obj.union(i*grid[0].length+j, i*grid[0].length+j-1);
+                    }
+                }
+            }
+            return obj.count;
+        }
     }
 
     public static int numOfIsland2(char[][] grid){
