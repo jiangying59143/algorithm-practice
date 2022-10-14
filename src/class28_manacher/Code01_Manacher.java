@@ -2,7 +2,7 @@ package class28_manacher;
 
 public class Code01_Manacher {
     public static void main(String[] args) {
-        System.out.println(longestPardline("xabccba"));
+        System.out.println(longestPardline("xabccbaxyyxxxddddxxx"));
     }
     public static int longestPardline(String a){
         String ms = getManacherString(a);
@@ -10,7 +10,7 @@ public class Code01_Manacher {
         int C = 0, R = 0;
         int max_r = 0;
         for (int i = 0; i < ms.length(); i++) {
-            parr[i] = R > i ? Math.min(parr[2*C-R],R-i): 1;
+            parr[i] = R > i ? Math.min(parr[2*C-R],R-i+1): 1;
             while(i-parr[i] >= 0 && i+parr[i] < ms.length()){
                 if(ms.charAt(i-parr[i]) == ms.charAt(i+parr[i])){
                     parr[i]++;
@@ -19,10 +19,10 @@ public class Code01_Manacher {
                 }
             }
             if(i+parr[i] > R){
-                R = i+parr[i];
+                R = i+parr[i]-1;
                 C = i;
+                max_r = Math.max(parr[i], max_r);
             }
-            max_r = Math.max(parr[i], max_r);
         }
         return (2*max_r-1)/2;
     }
