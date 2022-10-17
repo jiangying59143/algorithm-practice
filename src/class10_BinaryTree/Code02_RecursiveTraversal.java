@@ -1,24 +1,27 @@
 package class10_BinaryTree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Code02_RecursiveTraversal {
     enum TraversalOrder{
         preOrder, inOrder,posOrder;
     }
 
-    public void binaryTraversal(Node root, TraversalOrder order){
+    public static void binaryTraversal(Node root, TraversalOrder order, List<Node> list){
         if(root == null){
             return;
         }
         if(order == TraversalOrder.preOrder){
-            System.out.println(root.val);
+            list.add(root);
         }
-        binaryTraversal(root.left, order);
+        binaryTraversal(root.left, order, list);
         if(order == TraversalOrder.inOrder){
-            System.out.println(root.val);
+            list.add(root);
         }
-        binaryTraversal(root.right, order);
+        binaryTraversal(root.right, order, list);
         if(order == TraversalOrder.posOrder){
-            System.out.println(root.val);
+            list.add(root);
         }
     }
 
