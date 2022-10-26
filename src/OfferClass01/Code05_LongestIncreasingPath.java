@@ -49,6 +49,7 @@ public class Code05_LongestIncreasingPath {
         return count;
     }
 
+    //杀缓存
     private static int process2(int[][] matrix, int x, int y, int[][] dp){
         if(dp[x][y] != 0){
             return dp[x][y];
