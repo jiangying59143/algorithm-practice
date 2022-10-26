@@ -17,16 +17,17 @@ public class Code01_CordCoverMaxPoint {
     }
 
     private static int nearestLeft(int[] arr, int target, int R){
-        int L = 0, mid=0;
+        int L = 0, mid, res=R;
         while(L <= R){
             mid = L + ((R-L)>>1);
             if(arr[mid] >= target){
                 R = mid-1;
+                res = mid;
             }else{
                 L = mid+1;
             }
         }
-        return mid;
+        return res;
     }
 
     public static int f2(int[] arr, int l){
@@ -45,7 +46,7 @@ public class Code01_CordCoverMaxPoint {
     public static int force(int[] arr, int l){
         int count=0;
         for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j <= i; j++) {
                 if(arr[j] >= arr[i]-l){
                     count = Math.max(count, i-j+1);
                     break;
