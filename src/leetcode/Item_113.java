@@ -1,11 +1,9 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Item_113 {
+
     static class TreeNode {
         int val;
         TreeNode left;
@@ -21,28 +19,27 @@ public class Item_113 {
 
 
     public static List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        List<List<Integer>>  res = new ArrayList<>();
+        List<List<Integer>> ret = new LinkedList<List<Integer>>();
+        Deque<Integer> path = new LinkedList<Integer>();
         if(root == null){
-            return res;
+            return ret;
         }
-        res.add(new ArrayList<>());
-        process(root, null, targetSum, res);
-        if(res.get(res.size()-1).isEmpty()){
-            res.remove(res.size()-1);
-        }
-        return res;
+        process(root, targetSum, path, ret);
+        return ret;
     }
 
-    public static void process(TreeNode root, TreeNode pre, int targetSum, List<List<Integer>> res){
+    public static void process(TreeNode root, int targetSum, Deque<Integer> path, List<List<Integer>> ret){
         if(root == null){
             return;
         }
-        if(root.left == null && root.right == null && root.val == targetSum){
-            res.get(res.size() - 1).add(root.val);
-            res.add(new ArrayList<>());
+        path.offerLast(root.val);
+        targetSum -= root.val;
+        if(root.left == null && root.right == null && targetSum == 0){
+            ret.add(new ArrayList<>(path));
         }
-        process(root.left, root, targetSum - root.val, res);
-        process(root.right, root, targetSum - root.val, res);
+        process(root.left, targetSum, path, ret);
+        process(root.right, targetSum, path, ret);
+        path.pollLast();
     }
 
     public static List<List<Integer>> levelOrder(TreeNode root) {
@@ -77,24 +74,60 @@ public class Item_113 {
     }
 
     public static TreeNode generate(Integer[] arr){
-        TreeNode[] nodes=new TreeNode[arr.length];
+        List<TreeNode> nodes = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
             if(arr[i]!=null) {
-                nodes[i] = new TreeNode(arr[i]);
+                nodes.add(new TreeNode(arr[i]));
+            }else{
+                nodes.add(null);
             }
         }
-        for (int i = 0; i < nodes.length; i++) {
-            if(nodes[i] == null){
+
+        for (int i = 0; i < nodes.size(); i++) {
+            if(nodes.get(i) == null){
+//                nodes.add(null);
+//                nodes.add(null);
+//                nodes.add(2 * i + 1, null);
+//                nodes.add(2 * i + 2, null);
                 continue;
             }
-            if(2*i+1 < nodes.length) {
-                nodes[i].left = nodes[2 * i + 1];
+            if(2*i+1 < nodes.size() && nodes.get(2 * i + 1) != null) {
+                nodes.get(i).left = nodes.get(2 * i + 1);
             }
-            if(2*i+2 < nodes.length) {
-                nodes[i].right = nodes[2*i+2];
+            if(2*i+2 < nodes.size() && nodes.get(2 * i + 2) != null) {
+                nodes.get(i).right = nodes.get(2*i+2);
             }
         }
-        return nodes[0];
+        return nodes.get(0);
+    }
+
+    public static void printTree(TreeNode head) {
+        System.out.println("Binary Tree:");
+        printInOrder(head, 0, "H", 17);
+        System.out.println();
+    }
+
+    public static void printInOrder(TreeNode head, int height, String to, int len) {
+        if (head == null) {
+            return;
+        }
+        printInOrder(head.right, height + 1, "v", len);
+        String val = to + head.val + to;
+        int lenM = val.length();
+        int lenL = (len - lenM) / 2;
+        int lenR = len - lenM - lenL;
+        val = getSpace(lenL) + val + getSpace(lenR);
+        System.out.println(getSpace(height * len) + val);
+        printInOrder(head.left, height + 1, "^", len);
+    }
+
+    public static String getSpace(int num) {
+        String space = " ";
+        StringBuffer buf = new StringBuffer("");
+        for (int i = 0; i < num; i++) {
+            buf.append(space);
+        }
+        return buf.toString();
     }
 
     public static void main(String[] args) {
@@ -104,6 +137,7 @@ public class Item_113 {
         for (int i = 0; i < res.size(); i++) {
             System.out.println(Arrays.toString(res.get(i).toArray()));
         }
+        printTree(root);
         List<List<Integer>> list = pathSum(root, 22);
         for (int i = 0; i < list.size(); i++) {
             System.out.println(Arrays.toString(list.get(i).toArray()));
