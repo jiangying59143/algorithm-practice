@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreeNode {
     int val;
     TreeNode left;
@@ -12,11 +15,11 @@ public class TreeNode {
         this.right = right;
     }
 
-    public static Item_113.TreeNode generate(Integer[] arr){
-        Item_113.TreeNode[] nodes=new Item_113.TreeNode[arr.length];
+    public static TreeNode generate(Integer[] arr){
+        TreeNode[] nodes=new TreeNode[arr.length];
         for (int i = 0; i < arr.length; i++) {
             if(arr[i]!=null) {
-                nodes[i] = new Item_113.TreeNode(arr[i]);
+                nodes[i] = new TreeNode(arr[i]);
             }
         }
         for (int i = 0; i < nodes.length; i++) {
@@ -32,4 +35,34 @@ public class TreeNode {
         }
         return nodes[0];
     }
+
+    public static void printTree(TreeNode head) {
+        System.out.println("Binary Tree:");
+        printInOrder(head, 0, "H", 17);
+        System.out.println();
+    }
+
+    public static void printInOrder(TreeNode head, int height, String to, int len) {
+        if (head == null) {
+            return;
+        }
+        printInOrder(head.right, height + 1, "v", len);
+        String val = to + head.val + to;
+        int lenM = val.length();
+        int lenL = (len - lenM) / 2;
+        int lenR = len - lenM - lenL;
+        val = getSpace(lenL) + val + getSpace(lenR);
+        System.out.println(getSpace(height * len) + val);
+        printInOrder(head.left, height + 1, "^", len);
+    }
+
+    public static String getSpace(int num) {
+        String space = " ";
+        StringBuffer buf = new StringBuffer("");
+        for (int i = 0; i < num; i++) {
+            buf.append(space);
+        }
+        return buf.toString();
+    }
+
 }
