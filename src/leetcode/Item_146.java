@@ -6,23 +6,19 @@ import java.util.Map;
 public class Item_146 {
 
     static class LRUCache {
-        Map<Integer, Integer> valueMap = new HashMap<>();
-        Map<Integer, Integer> mapToKey = new HashMap<>();
-        int[] keyArr;
-        int start = 0, end = 0, size = 0;
+        Map<Integer, DoubleEndNode> valueMap = new HashMap<>();
+        int capacity;
+        int index = 0;
+        DoubleEndNode startNode = null, endNode = null;
         public LRUCache(int capacity) {
-            keyArr = new int[capacity];
+            this.capacity = capacity;
         }
 
         public int get(int key) {
             int res;
             if(valueMap.containsKey(key)) {
-                int preIndex = mapToKey.get(key);
-                int lastIndex = end-1 < 0 ? size-1 : end-1;
-                mapToKey.put(key, lastIndex);
-                mapToKey.put(keyArr[lastIndex], preIndex);
-                swap(keyArr, preIndex, lastIndex);
-                res = valueMap.get(key);
+                DoubleEndNode node = getNode(key);
+                res = node.val;
             }else{
                 res = -1;
             }
@@ -32,35 +28,46 @@ public class Item_146 {
 
         public void put(int key, int value) {
             if(valueMap.containsKey(key)){
-                valueMap.put(key, value);
-                int preIndex = mapToKey.get(key);
-                int lastIndex = end-1 < 0 ? size-1 : end-1;
-                mapToKey.put(key, lastIndex);
-                mapToKey.put(keyArr[lastIndex], preIndex);
-                swap(keyArr, preIndex, lastIndex);
+                DoubleEndNode node = getNode(key);
+                node.val = value;
             }else{
-                if(size == keyArr.length) {
-                    valueMap.remove(keyArr[start]);
-                    mapToKey.remove(keyArr[start]);
-                    start = (start+1) % keyArr.length;
+                if(index == capacity) {
+                    valueMap.remove(startNode.key);
+                    startNode = startNode.next;
+                    if(startNode != null)startNode.pre = null;
                 }
-                valueMap.put(key, value);
-                mapToKey.put(key, end);
-                keyArr[end] = key;
-                if(size < keyArr.length) {
-                    size++;
+                DoubleEndNode node = new DoubleEndNode(key, value);
+                valueMap.put(key, node);
+                if(startNode == null){
+                    startNode = node;
+                    endNode = node;
+                }else {
+                    node.pre = endNode;
+                    endNode.next = node;
+                    endNode = node;
                 }
-                end = (end+1) % keyArr.length;
+                if(index < capacity) {
+                    index++;
+                }
             }
         }
 
-        private void swap(int[] arr, int i, int j){
-            if(i == j){
-                return;
+        private DoubleEndNode getNode(int key){
+            DoubleEndNode node = valueMap.get(key);
+            if(node == endNode){
+                return node;
+            }else if(node == startNode){
+                startNode = startNode.next;
+                startNode.pre = null;
+            }else{
+                node.next.pre = node.pre;
+                node.pre.next = node.next;
             }
-            arr[i] = arr[i] ^ arr[j];
-            arr[j] = arr[i] ^ arr[j];
-            arr[i] = arr[i] ^ arr[j];
+            endNode.next = node;
+            node.pre = endNode;
+            node.next = null;
+            endNode = node;
+            return node;
         }
     }
 
@@ -75,22 +82,33 @@ public class Item_146 {
 //        lRUCache.get(1);    // 返回 -1 (未找到)
 //        lRUCache.get(3);    // 返回 3
 //        lRUCache.get(4);    // 返回 4
-
+//
+//        System.out.println("--------------");
+//        lRUCache = new LRUCache(3);
+//        lRUCache.put(1, 1);
+//        lRUCache.put(2, 2);
+//        lRUCache.put(3, 3);
+//        lRUCache.put(4, 4); // 2, 3, 4
+//        lRUCache.get(4); // 2, 3, 4
+//        lRUCache.get(3); // 2, 4, 3
+//        lRUCache.get(2); // 4, 3, 2
+//        lRUCache.get(1);
+//        lRUCache.put(5, 5); // 5, 3, 2
+//        lRUCache.get(1);
+//        lRUCache.get(2);
+//        lRUCache.get(3);
+//        lRUCache.get(4);
+//        lRUCache.get(5);
         System.out.println("--------------");
-        lRUCache = new LRUCache(3);
-        lRUCache.put(1, 1);
+        lRUCache = new LRUCache(2);
+        lRUCache.put(1, 0);
         lRUCache.put(2, 2);
+        lRUCache.get(1);
         lRUCache.put(3, 3);
-        lRUCache.put(4, 4); // 2, 3, 4
-        lRUCache.get(4); // 2, 3, 4
-        lRUCache.get(3); // 2, 4, 3
-        lRUCache.get(2); // 4, 3, 2
-        lRUCache.get(1);
-        lRUCache.put(5, 5); // 5, 3, 2
-        lRUCache.get(1);
         lRUCache.get(2);
+        lRUCache.put(4, 4);
+        lRUCache.get(1);
         lRUCache.get(3);
         lRUCache.get(4);
-        lRUCache.get(5);
     }
 }
