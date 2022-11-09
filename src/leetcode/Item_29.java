@@ -25,7 +25,7 @@ public class Item_29 {
             for (int j = 1; j <= i; j++) {
                 tempRes <<= 1;
                 tempCount <<= 1;
-                if(res > dividend){
+                if(res+tempRes > dividend){
                     tempRes >>= 1;
                     tempCount >>= 1;
                     break;
