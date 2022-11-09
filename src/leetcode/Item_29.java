@@ -10,43 +10,62 @@ public class Item_29 {
         }
         boolean dividendPositiveFlag = dividend > 0;
         boolean divisorPositiveFlag = divisor > 0;
-        if(!dividendPositiveFlag){
+        if(dividendPositiveFlag){
             dividend = -dividend;
         }
-        if(!divisorPositiveFlag){
+        if(divisorPositiveFlag){
             divisor = -divisor;
         }
-        if(dividend < divisor){
+        if(dividend > divisor){
             return 0;
         }
         int res = 0, count = 0;
-        for (int i = 31; i >= 0; i--) {
+        for (int i = 30; i >= 0; i--) {
             int tempRes = divisor, tempCount=1;
             for (int j = 1; j <= i; j++) {
                 tempRes <<= 1;
                 tempCount <<= 1;
-                if(res+tempRes > dividend){
-                    tempRes >>= 1;
+                if(res+tempRes < dividend || res+tempRes >= 0){
+                    tempRes >>>= 1;
                     tempCount >>= 1;
                     break;
                 }
             }
-            res += tempRes;
-            count += tempCount;
+            if(tempRes == divisor && i != 0){
+                continue;
+            }
+            if(res+tempRes >= dividend && res+tempRes < 0) {
+                res += tempRes;
+                count += tempCount;
+            }
         }
         return !(dividendPositiveFlag ^ divisorPositiveFlag) ? count : -count;
     }
 
+
+
     public static void main(String[] args) {
-//        System.out.println(divide(-1, -1));
-        System.out.println(divide(10, 3));
-//        System.out.println(divide(7, -3));
-//        System.out.println(divide(Integer.MIN_VALUE, -1));
-//        System.out.println(divide(Integer.MIN_VALUE, 1));
-//        System.out.println(divide(0, 1));
-//        System.out.println(divide(1, 1));
-//        System.out.println(divide(Integer.MAX_VALUE, 1));
-//        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE));
-//        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE));
+
+//        System.out.println(-1302479897 << 1);
+//        System.out.println(divide(-1459848980, -1302479897) + " " + (-1459848980/-1302479897));
+//        if(true){
+//            return;
+//        }
+        int testCount = 10000000;
+        for (int i = 0; i < testCount; i++) {
+            int dividend = (int)(Integer.MIN_VALUE * Math.random() - 1) + (int)(Integer.MAX_VALUE * Math.random() + 1);
+            int divisor = (int)(Integer.MIN_VALUE * Math.random() - 1) + (int)(Integer.MAX_VALUE * Math.random() + 1);
+            if(divisor == 0){
+                continue;
+            }
+            int res = divide(dividend, divisor);
+            if(res != (dividend / divisor)){
+                System.out.println(dividend + " " + divisor);
+                System.out.println("correct: " + (dividend / divisor));
+                System.out.println("wrong: " + res);
+                break;
+            }
+        }
+        System.out.println("end!");
     }
 }
