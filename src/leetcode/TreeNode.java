@@ -36,6 +36,16 @@ public class TreeNode {
         return nodes[0];
     }
 
+    public static void printPre(TreeNode head){
+        if(head == null){
+            System.out.print("null ");
+            return;
+        }
+        System.out.print(head.val + " ");
+        printPre(head.left);
+        printPre(head.right);
+    }
+
     public static void printTree(TreeNode head) {
         System.out.println("Binary Tree:");
         printInOrder(head, 0, "H", 17);
