@@ -23,12 +23,14 @@ public class Item_29 {
         for (int i = 30; i >= 0; i--) {
             int tempRes = divisor, tempCount=1;
             for (int j = 1; j <= i; j++) {
-                tempRes <<= 1;
-                tempCount <<= 1;
-                if(res+tempRes < dividend || res+tempRes >= 0){
-                    tempRes >>>= 1;
-                    tempCount >>= 1;
-                    break;
+                if(tempRes << 1 < 0) {
+                    tempRes <<= 1;
+                    tempCount <<= 1;
+                    if (res + tempRes < dividend) {
+                        tempRes >>= 1;
+                        tempCount >>= 1;
+                        break;
+                    }
                 }
             }
             if(tempRes == divisor && i != 0){
@@ -47,7 +49,7 @@ public class Item_29 {
     public static void main(String[] args) {
 
 //        System.out.println(-1302479897 << 1);
-//        System.out.println(divide(-1459848980, -1302479897) + " " + (-1459848980/-1302479897));
+//        System.out.println(divide(1820809884, -431787959) + " " + (1820809884/-431787959));
 //        if(true){
 //            return;
 //        }
