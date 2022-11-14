@@ -15,24 +15,21 @@ public class Item_148 {
             return;
         }
         int[] help = new int[arr.length];
-        int step  = 1;
-        while(step <= arr.length){
-            int L = 0;
+        int step  = 1, L=0, M, R=0;
+        while(step < arr.length){
+            L = 0;
             if(arr.length - 1 - step < L){
                 break;
             }
-            int M = L+step-1;
-            int R = arr.length - 1 - step < M ? arr.length-1 : M+step;
-            while(R <= arr.length-1) {
+            while(L < arr.length) {
+                M = L+step-1;
+                R = arr.length - 1 - step < M ? arr.length-1 : M+step;
+
                 int leftIndex = L;
                 int rightIndex = M + 1;
                 int helpIndex = L-1;
                 while (leftIndex <= M && rightIndex <= R) {
-                    if (arr[leftIndex] > arr[rightIndex]) {
-                        help[++helpIndex] = arr[rightIndex++];
-                    } else {
-                        help[++helpIndex] = arr[leftIndex++];
-                    }
+                    help[++helpIndex] = arr[leftIndex] <= arr[rightIndex] ? arr[leftIndex++] : arr[rightIndex++];
                 }
                 while (leftIndex <= M) {
                     help[++helpIndex] = arr[leftIndex++];
@@ -44,8 +41,6 @@ public class Item_148 {
                     break;
                 }
                 L = R+1;
-                M = L+step-1;
-                R = arr.length - 1 - step < M ? arr.length-1 : M+step;
             }
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = help[i];
