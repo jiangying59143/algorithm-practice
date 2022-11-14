@@ -16,35 +16,44 @@ public class Item_148 {
         }
         int[] help = new int[arr.length];
         int step  = 1;
-        while(step < arr.length){
-            step <<= 1;
+        while(step <= arr.length){
             int L = 0;
-            int R = L + step -1;
-            int M = L + ((R-L)>>1);
-            while(R < arr.length) {
+            if(arr.length - 1 - step < L){
+                break;
+            }
+            int M = L+step-1;
+            int R = arr.length - 1 - step < M ? arr.length-1 : M+step;
+            while(R <= arr.length-1) {
                 int leftIndex = L;
                 int rightIndex = M + 1;
-                int helpIndex = L;
+                int helpIndex = L-1;
                 while (leftIndex <= M && rightIndex <= R) {
                     if (arr[leftIndex] > arr[rightIndex]) {
-                        help[helpIndex++] = arr[rightIndex++];
+                        help[++helpIndex] = arr[rightIndex++];
                     } else {
-                        help[helpIndex++] = arr[leftIndex++];
+                        help[++helpIndex] = arr[leftIndex++];
                     }
                 }
                 while (leftIndex <= M) {
-                    help[helpIndex++] = arr[leftIndex++];
+                    help[++helpIndex] = arr[leftIndex++];
                 }
                 while (rightIndex <= R) {
-                    help[helpIndex++] = arr[rightIndex++];
+                    help[++helpIndex] = arr[rightIndex++];
                 }
-                L = R;
-                R = L + step - 1;
-                M = L + ((R - L) >> 1);
+                if(helpIndex == arr.length-1){
+                    break;
+                }
+                L = R+1;
+                M = L+step-1;
+                R = arr.length - 1 - step < M ? arr.length-1 : M+step;
             }
-        }
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = help[i];
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = help[i];
+            }
+            if(Integer.MAX_VALUE-step < step){
+                break;
+            }
+            step <<= 1;
         }
     }
 
@@ -68,13 +77,34 @@ public class Item_148 {
         return res;
     }
 
-    public static void main(String[] args) {
-//        ListNode node = ListNode.generate(new int[]{4,2,1,3});
-//        node = sortListForce(node);
-//        ListNode.print(node);
+    public static boolean isEqual(int[] a, int[] b){
+        if(a.length != b.length){
+            return false;
+        }
 
-        int[] arr = new int[]{5,3,1,6,4,2};
-        mergeSort2(arr);
-        System.out.println(Arrays.toString(arr));
+        for (int i = 0; i < a.length; i++) {
+            if(a[i] != b[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int testCount = 100;
+        for (int i = 0; i < testCount; i++) {
+            int[] arr = Data.generate(10, 1,100);
+            int[] arr1 = Arrays.copyOf(arr, arr.length);
+            int[] orgin = Arrays.copyOf(arr, arr.length);
+            mergeSort2(arr);
+            Arrays.sort(arr1);
+            if(!isEqual(arr, arr1)){
+                System.out.println(Arrays.toString(orgin));
+                System.out.println(Arrays.toString(arr));
+                System.out.println(Arrays.toString(arr1));
+                break;
+            }
+        }
+        System.out.println("end!!");
     }
 }
