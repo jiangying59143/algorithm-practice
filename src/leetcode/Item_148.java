@@ -15,37 +15,37 @@ public class Item_148 {
             return;
         }
         int[] help = new int[arr.length];
-        int step  = 1, L=0, M, R=0;
+        int step  = 1, L, M, R;
         while(step < arr.length){
             L = 0;
-            if(arr.length - 1 - step < L){
-                break;
-            }
             while(L < arr.length) {
+                if(arr.length - step < L){
+                    break;
+                }
                 M = L+step-1;
                 R = arr.length - 1 - step < M ? arr.length-1 : M+step;
 
                 int leftIndex = L;
                 int rightIndex = M + 1;
-                int helpIndex = L-1;
+                int helpIndex = L;
                 while (leftIndex <= M && rightIndex <= R) {
-                    help[++helpIndex] = arr[leftIndex] <= arr[rightIndex] ? arr[leftIndex++] : arr[rightIndex++];
+                    help[helpIndex++] = arr[leftIndex] <= arr[rightIndex] ? arr[leftIndex++] : arr[rightIndex++];
                 }
                 while (leftIndex <= M) {
-                    help[++helpIndex] = arr[leftIndex++];
+                    help[helpIndex++] = arr[leftIndex++];
                 }
                 while (rightIndex <= R) {
-                    help[++helpIndex] = arr[rightIndex++];
-                }
-                if(helpIndex == arr.length-1){
-                    break;
+                    help[helpIndex++] = arr[rightIndex++];
                 }
                 L = R+1;
             }
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = help[i];
             }
-            if(Integer.MAX_VALUE-step < step){
+//            if(Integer.MAX_VALUE-step < step){
+//                break;
+//            }
+            if(step > arr.length /2){
                 break;
             }
             step <<= 1;
@@ -86,17 +86,32 @@ public class Item_148 {
     }
 
     public static void main(String[] args) {
+        int[] arr0 = new int[]{59, 5, 90, 20, 17, 100, 70, 76, 77};
+        System.out.println(Arrays.toString(arr0));
+        mergeSort2(arr0);
+        System.out.println(Arrays.toString(arr0));
+        if(true){
+            return;
+        }
         int testCount = 100;
         for (int i = 0; i < testCount; i++) {
             int[] arr = Data.generate(10, 1,100);
             int[] arr1 = Arrays.copyOf(arr, arr.length);
             int[] orgin = Arrays.copyOf(arr, arr.length);
-            mergeSort2(arr);
-            Arrays.sort(arr1);
-            if(!isEqual(arr, arr1)){
+            try {
+                mergeSort2(arr);
+                Arrays.sort(arr1);
+                if (!isEqual(arr, arr1)) {
+                    System.out.println(Arrays.toString(orgin));
+                    System.out.println(Arrays.toString(arr));
+                    System.out.println(Arrays.toString(arr1));
+                    break;
+                }
+            }catch (Exception e){
                 System.out.println(Arrays.toString(orgin));
                 System.out.println(Arrays.toString(arr));
                 System.out.println(Arrays.toString(arr1));
+                e.printStackTrace();
                 break;
             }
         }
