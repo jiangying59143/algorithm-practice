@@ -7,7 +7,87 @@ import java.util.List;
 
 public class Item_148 {
     public static ListNode sortList(ListNode head) {
-        return null;
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode leftHead = head, dummyHead = new ListNode(), rightHead, nextLeftHead;
+        int mergeSize  = 1, size = 0;
+        ListNode cur = head;
+        while(cur != null){
+            size++;
+            cur = cur.next;
+        }
+        while(mergeSize < size){
+            while(leftHead != null) {
+                rightHead = getNextMergePartHead(leftHead, mergeSize);
+                if(rightHead == null){
+                    break;
+                }
+                nextLeftHead = getNextMergePartHead(rightHead, mergeSize);
+                ListNode tail = merge(leftHead,rightHead);
+                tail.next = nextLeftHead;
+                if(dummyHead.next == null){
+                    dummyHead.next = leftHead;
+                }
+                leftHead = nextLeftHead;
+            }
+            if(mergeSize > size /2){
+                break;
+            }
+            leftHead = dummyHead.next;
+            dummyHead.next = null;
+            mergeSize <<= 1;
+        }
+        return dummyHead.next;
+    }
+
+    private static ListNode getNextMergePartHead(ListNode head, int mergeSize){
+        ListNode tail = head.next;
+        while(mergeSize > 0 && head != null){
+            tail = head;
+            head = head.next;
+            mergeSize--;
+        }
+        if(head != null){
+            head.next = null;
+        }
+        return tail.next;
+    }
+
+    private static ListNode merge(ListNode h1, ListNode h2){
+        ListNode preH1=null, curH1 = h1, tail = h2;
+        while(curH1 != null && h2 != null){
+            if(curH1.val <= h2.val){
+                tail = preH1;
+                preH1 = curH1;
+                curH1 = curH1.next;
+            }else{
+                if(preH1 == null){
+                    preH1 = h2;
+                    preH1.next = curH1;
+                }else{
+                    preH1.next = h2;
+                    preH1.next.next = curH1;
+                }
+                tail = h2;
+                h2 = h2.next;
+            }
+        }
+        while(curH1 != null){
+            preH1 = curH1;
+            tail = preH1;
+            curH1 = curH1.next;
+        }
+
+        if(h2 != null){
+            preH1.next = h2;
+        }
+
+        while(h2 != null){
+            tail = h2;
+            h2 = h2.next;
+        }
+        return tail;
     }
 
     public static void mergeSort2(int[] arr){
@@ -85,17 +165,10 @@ public class Item_148 {
         return true;
     }
 
-    public static void main(String[] args) {
-        int[] arr0 = new int[]{59, 5, 90, 20, 17, 100, 70, 76, 77};
-        System.out.println(Arrays.toString(arr0));
-        mergeSort2(arr0);
-        System.out.println(Arrays.toString(arr0));
-        if(true){
-            return;
-        }
-        int testCount = 100;
+    public static void testArrSort(){
+        int testCount = 1000;
         for (int i = 0; i < testCount; i++) {
-            int[] arr = Data.generate(10, 1,100);
+            int[] arr = Data.generate(1000, 1,100);
             int[] arr1 = Arrays.copyOf(arr, arr.length);
             int[] orgin = Arrays.copyOf(arr, arr.length);
             try {
@@ -116,5 +189,16 @@ public class Item_148 {
             }
         }
         System.out.println("end!!");
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{-1,5,3,4,0};
+        System.out.println(Arrays.toString(arr));
+        ListNode head = ListNode.generate(arr);
+        ListNode head2 = ListNode.generate(arr);
+        sortListForce(head2);
+        ListNode.print(head2);
+        sortList(head);
+        ListNode.print(head);
     }
 }
