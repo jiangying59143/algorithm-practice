@@ -6,25 +6,23 @@ import java.util.List;
 public class Item_51 {
     public static List<List<String>> solveNQueens(int n) {
         List<List<String>> res = new ArrayList<>();
-        process(res, 0, n, null, true);
+        res.add(new ArrayList<>());
+        process(res, 0, n, true);
         return res;
     }
 
-    public static void process(List<List<String>> res, int i, int n, List<String> grid, boolean preResult){
+    public static void process(List<List<String>> res, int i, int n, boolean preResult){
         for (int j = 0; j < n; j++) {
-            if(i == 0){
-                grid = new ArrayList<>();
-            }
             String rowString = getRow(j, n);
-            grid.add(rowString);
-            if(isValid(grid, i, j) && preResult) {
+            res.get(res.size()-1).add(rowString);
+            if(isValid(res.get(res.size()-1), i, j) && preResult) {
                 if(i==n-1) {
-                    res.add(grid);
+                    res.add(new ArrayList<>());
                 }else{
-                    process(res, i+1, n, grid, isValid(grid, i, j) && preResult);
+                    process(res, i+1, n, isValid(res.get(res.size()-1), i, j) && preResult);
                 }
             }else{
-                grid.remove(i);
+                res.get(res.size()-1).remove(i);
             }
         }
     }
