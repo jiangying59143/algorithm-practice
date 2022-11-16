@@ -42,16 +42,17 @@ public class Item_148 {
     }
 
     private static ListNode getNextMergePartHead(ListNode head, int mergeSize){
-        ListNode tail = head.next;
-        while(mergeSize > 0 && head != null){
+        ListNode tail = head;
+        while(mergeSize > 1 && head != null){
             tail = head;
             head = head.next;
             mergeSize--;
         }
+        ListNode nextPartHead = tail.next;
         if(head != null){
             head.next = null;
         }
-        return tail.next;
+        return nextPartHead;
     }
 
     private static ListNode merge(ListNode h1, ListNode h2){
