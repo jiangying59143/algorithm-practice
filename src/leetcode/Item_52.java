@@ -3,26 +3,27 @@ package leetcode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Item_51 {
-    public static List<List<String>> solveNQueens(int n) {
-        List<List<String>> res = new ArrayList<>();
-        process(res, 0, n, new ArrayList<>(), true);
-        return res;
+public class Item_52 {
+
+    public static int totalNQueens(int n) {
+        return process(0, n, new ArrayList<>(), true);
     }
 
-    public static void process(List<List<String>> res, int i, int n, List<String> grid, boolean preResult){
+    public static int process(int i, int n, List<String> grid, boolean preResult){
+        int sum = 0;
         for (int j = 0; j < n; j++) {
             String rowString = getRow(j, n);
             grid.add(rowString);
             if(isValid(grid, i, j) && preResult) {
                 if(i==n-1) {
-                    res.add(new ArrayList<>(grid));
+                    sum += 1;
                 }else{
-                    process(res, i+1, n, grid, isValid(grid, i, j) && preResult);
+                    sum += process(i+1, n, grid, isValid(grid, i, j) && preResult);
                 }
             }
             grid.remove(i);
         }
+        return sum;
     }
 
     private static String getRow(int i, int n){
@@ -52,12 +53,6 @@ public class Item_51 {
     }
 
     public static void main(String[] args) {
-        List<List<String>> res = solveNQueens(5);
-        for (int i = 0; i < res.size(); i++) {
-            for (int j = 0; j < res.get(i).size(); j++) {
-                System.out.println(res.get(i).get(j));
-            }
-            System.out.println();
-        }
+        System.out.println(totalNQueens(3));
     }
 }
