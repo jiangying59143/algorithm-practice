@@ -7,6 +7,23 @@ public class ListNode{
     ListNode(int val) { this.val = val; }
     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 
+    public static boolean isEqual(ListNode a, ListNode b){
+        if(a == b){
+            return true;
+        }
+        while(a != null && b != null){
+            if(a.val != b.val){
+                return false;
+            }
+            a = a.next;
+            b = b.next;
+        }
+        if(a != b){
+            return false;
+        }
+        return true;
+    }
+
     public static ListNode generate(int[] arr){
         if(arr == null || arr.length == 0){
             return null;
