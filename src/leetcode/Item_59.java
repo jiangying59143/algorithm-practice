@@ -4,6 +4,27 @@ import java.util.Arrays;
 
 public class Item_59 {
     public static int[][] generateMatrix(int n) {
+        int k=1, i=0, j=0, nextI, nextJ,  di=0, N = n*n;
+        int[][] directions = new int[][]{
+                {0,1},
+                {1,0},
+                {0,-1},
+                {-1,0},
+        }, res = new int[n][n];
+        while(k <= N){
+            res[i][j] = k++;
+            nextI = i+directions[di][0];
+            nextJ = j+directions[di][1];
+            if(nextI < 0 || nextI >= n || nextJ < 0 || nextJ >= n || res[nextI][nextJ] != 0){
+                di = (di+1)%directions.length;
+            }
+            i= i+directions[di][0];
+            j = j+directions[di][1];
+        }
+        return res;
+    }
+
+    public static int[][] generateMatrix2(int n) {
         int[][] arr = new int[n][n];
         process(arr, 0,0, 1);
         return arr;
