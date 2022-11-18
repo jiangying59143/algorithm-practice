@@ -7,28 +7,21 @@ public class Item_10 {
     }
 
     public boolean isMatch(String s, String p) {
-        return process(s, p, 0);
+        return process(s, p, 0, 0);
     }
 
-    private boolean process(String s, String p, int index){
-        if(index == s.length()){
-            if(index == p.length()){
-                return true;
-            }else{
-                boolean res = true;
-                for (int i = index; i < p.length(); i++) {
-                    res = p.charAt(index) == '*' && res;
-                }
-                return res;
+    private boolean process(String s, String p, int si, int pi){
+        if(p.charAt(pi) == '*'){
+            if(p.charAt(pi-1) == '.' || s.charAt(si) == s.charAt(si-1)){
+
             }
         }
+        if(s.charAt(si) == p.charAt(pi)){
 
-        if(p.charAt(index) != '.' && p.charAt(index) != '*'){
-            return s.charAt(index) == p.charAt(index) && process(s, p, index + 1);
-        }else{
-            return p.charAt(index) == '.' && process(s, p, index + 1)
-                    || p.charAt(index) == '*' && process(s, p, s.length());
+        }else if(p.charAt(pi) == '.'){
+
         }
+
     }
 
     public int index(String s, String p) {
