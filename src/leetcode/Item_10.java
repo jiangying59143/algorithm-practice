@@ -10,6 +10,7 @@ public class Item_10 {
         System.out.println(isMatch("aaa", "ab*a*c*a") + " " + isMatch2("aaa", "ab*a*c*a"));
         System.out.println(isMatch("aab", "c*a*b") + " " + isMatch2("aab", "c*a*b"));
         System.out.println(isMatch("mississippi","mis*is*p*.") + " " + isMatch2("mississippi","mis*is*p*."));
+        System.out.println(isMatch("abcd","d*") + " " + isMatch2("abcd","d*"));
     }
 
     public static boolean isMatch(String s, String p) {
