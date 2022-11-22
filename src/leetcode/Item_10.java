@@ -17,6 +17,7 @@ public class Item_10 {
         dp[0][0] = true;
         for (int si = 0; si <= s.length(); si++) {
             for (int pi = 1; pi <= p.length(); pi++) {
+                dp[si%2][pi] = false;
                 if(si > 0 && charMatch(s, p, si-1, pi-1) && dp[(si-1)%2][(pi-1)]){
                     dp[si%2][pi] = true;
                 }else if(p.charAt(pi-1) == '*' && pi >= 2){
