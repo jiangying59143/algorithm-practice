@@ -4,34 +4,49 @@ public class Item_10 {
     public static void main(String[] args) {
 //        Item_10 obj = new Item_10();
 //        System.out.println(obj.index("abcde", "cde"));
-        System.out.println(isMatch2("aa", "a"));
-        System.out.println(isMatch2("aa", "a*"));
-        System.out.println(isMatch2("ab", ".*"));
+        System.out.println(isMatch("aa", "a") + " " + isMatch2("aa", "a"));
+        System.out.println(isMatch("aa", "a*") + " " + isMatch2("aa", "a*"));
+        System.out.println(isMatch("ab", ".*") + " " + isMatch2("ab", ".*"));
+        System.out.println(isMatch("aaa", "ab*a*c*a") + " " + isMatch2("aaa", "ab*a*c*a"));
+        System.out.println(isMatch("aab", "c*a*b") + " " + isMatch2("aab", "c*a*b"));
+        System.out.println(isMatch("mississippi","mis*is*p*.") + " " + isMatch2("mississippi","mis*is*p*."));
     }
 
     public static boolean isMatch(String s, String p) {
-        return process(s, p, s.length(), p.length());
+        boolean[][] dp = new boolean[2][p.length()+1];
+        dp[0][0] = true;
+        for (int si = 0; si <= s.length(); si++) {
+            for (int pi = 1; pi <= p.length(); pi++) {
+                if(si > 0 && charMatch(s, p, si-1, pi-1) && dp[(si-1)%2][(pi-1)]){
+                    dp[si%2][pi] = true;
+                }else if(p.charAt(pi-1) == '*' && pi >= 2){
+                    if(dp[si%2][(pi-2)]){
+                        dp[si%2][pi] = true;
+                        continue;
+                    }
+                    if(si >0 && charMatch(s, p, si-1, pi-2) && dp[(si-1)%2][pi]){
+                        dp[si%2][pi] = true;
+                    }
+                }
+            }
+        }
+        return dp[s.length()%2][p.length()];
     }
 
     public static boolean isMatch2(String s, String p) {
         boolean[][] dp = new boolean[s.length()+1][p.length()+1];
         dp[0][0] = true;
-        for (int si = 1; si < dp.length; si++) {
-            for (int pi = 1; pi < dp[si].length; pi++) {
-                if(charMatch(s, p, si-1, pi-1) && dp[si-1][pi-1]){
+        for (int si = 0; si <= s.length(); si++) {
+            for (int pi = 1; pi <= p.length(); pi++) {
+                if(si > 0 && charMatch(s, p, si-1, pi-1) && dp[si-1][pi-1]){
                     dp[si][pi] = true;
-                }else if(p.charAt(pi-1) == '*'){
+                }else if(p.charAt(pi-1) == '*' && pi >= 2){
                     if(dp[si][pi-2]){
                         dp[si][pi] = true;
                         continue;
                     }
-                    for (int i = si; i > 0; i--) {
-                        if(charMatch(s, p, i-1, pi-2)){
-                            if(dp[i-1][pi-2]){
-                                dp[si][pi] = true;
-                                break;
-                            }
-                        }
+                    if(si >0 && charMatch(s, p, si-1, pi-2) && dp[si-1][pi]){
+                        dp[si][pi] = true;
                     }
                 }
             }
@@ -39,29 +54,44 @@ public class Item_10 {
         return dp[s.length()][p.length()];
     }
 
+    private static boolean charMatch(String s, String p, int si, int pi){
+        return s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.';
+    }
+
+    public static boolean isMatch1(String s, String p) {
+        boolean[][] dp = new boolean[s.length()+1][p.length()+1];
+        return process(s, p, s.length(), p.length(), dp);
+    }
+
     //按照字符串长度
-    private static boolean process(String s, String p, int si, int pi){
+    private static boolean process(String s, String p, int si, int pi, boolean[][] dp){
+        if(dp[si][pi]){
+            return dp[si][pi];
+        }
         if(si == 0 && pi == 0){
+            dp[si][pi] = true;
             return true;
         }
-        if(si <= 0 || pi <= 0){
-            return false;
-        }
-        if(charMatch(s, p, si-1, pi-1) && process(s, p, si-1, pi-1)){
+        if(si > 0 && pi > 0 && charMatch(s, p, si-1, pi-1) && process(s, p, si-1, pi-1, dp)){
+            dp[si][pi] = true;
             return true;
-        }else if(p.charAt(pi-1) == '*'){
+        }else if(pi > 0 && p.charAt(pi-1) == '*'){
             // * 前面得字符为0个
-            if(process(s, p, si, pi-2)){
+            if(process(s, p, si, pi-2, dp)){
+                dp[si][pi] = true;
+                return true;
+            }else if(si > 0 && charMatch(s, p, si-1, pi-2) && process(s, p, si-1, pi, dp)){
+                dp[si][pi] = true;
                 return true;
             }
-            while(si > 0){
-                if(charMatch(s, p, si-1, pi-2)){
-                    if(process(s, p, si-1, pi-2)){
-                        return true;
-                    }
-                }
-                si--;
-            }
+//            while(si > 0){
+//                if(charMatch(s, p, si-1, pi-2)){
+//                    if(process(s, p, si-1, pi-2)){
+//                        return true;
+//                    }
+//                }
+//                si--;
+//            }
         }
         return false;
     }
@@ -75,7 +105,7 @@ public class Item_10 {
         }
         if(charMatch(s, p, si, pi) && process2(s, p, si-1, pi-1)){
             return true;
-        }else if(p.charAt(pi) == '*'){
+        }else if(pi > 0 && p.charAt(pi) == '*'){
             // * 前面得字符为0个
             if(process2(s, p, si, pi-2)){
                return true;
@@ -113,10 +143,6 @@ public class Item_10 {
             }
         }
         return false;
-    }
-
-    private static boolean charMatch(String s, String p, int si, int pi){
-        return s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.';
     }
 
     public int index(String s, String p) {
