@@ -1,5 +1,7 @@
 package leetcode;
 
+import java.util.Arrays;
+
 public class Item_10 {
     public static void main(String[] args) {
 //        Item_10 obj = new Item_10();
@@ -15,9 +17,16 @@ public class Item_10 {
 
     public static boolean isMatch(String s, String p) {
         boolean[][] dp = new boolean[2][p.length()+1];
-        dp[0][0] = true;
         for (int si = 0; si <= s.length(); si++) {
-            for (int pi = 1; pi <= p.length(); pi++) {
+            for (int pi = 0; pi <= p.length(); pi++) {
+                if(pi == 0){
+                    if(si == 0){
+                        dp[si%2][pi] = true;
+                    }else {
+                        dp[si % 2][pi] = false;
+                    }
+                    continue;
+                }
                 dp[si%2][pi] = false;
                 if(si > 0 && charMatch(s, p, si-1, pi-1) && dp[(si-1)%2][(pi-1)]){
                     dp[si%2][pi] = true;

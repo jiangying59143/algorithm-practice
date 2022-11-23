@@ -6,10 +6,24 @@ import java.util.List;
 public class Item_52 {
 
     public static int totalNQueens(int n) {
-        return process(0, n, new ArrayList<>(), true);
+        return process(0, n, 0, 0,0);
     }
 
-    public static int process(int i, int n, List<String> grid, boolean preResult){
+    public static int process(int i, int n, int column, int diagonals1, int diagonals2){
+        if(i == n){
+            return 1;
+        }
+        int sum = 0;
+        int availablePositions = ((1<<n)-1) & (~(column | diagonals1 | diagonals2));
+        while (availablePositions != 0) {
+            int position = availablePositions & (-availablePositions);
+            availablePositions = availablePositions & (availablePositions-1);
+            sum += process(i+1, n,column | position, (diagonals1 | position)<<1, (diagonals2 | position)>>1);
+        }
+        return sum;
+    }
+
+    public static int process1(int i, int n, List<String> grid, boolean preResult){
         int sum = 0;
         for (int j = 0; j < n; j++) {
             String rowString = getRow(j, n);
@@ -18,7 +32,7 @@ public class Item_52 {
                 if(i==n-1) {
                     sum += 1;
                 }else{
-                    sum += process(i+1, n, grid, isValid(grid, i, j) && preResult);
+                    sum += process1(i+1, n, grid, isValid(grid, i, j) && preResult);
                 }
             }
             grid.remove(i);
@@ -53,6 +67,6 @@ public class Item_52 {
     }
 
     public static void main(String[] args) {
-        System.out.println(totalNQueens(3));
+        System.out.println(totalNQueens(5));
     }
 }
