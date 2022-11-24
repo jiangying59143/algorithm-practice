@@ -56,10 +56,11 @@ public class Item_30 {
 
     public static void process(String s, String[] words, boolean[] visited, StringBuilder sb, List<Integer> res){
         if(sb.length() == words.length*words[0].length()){
-            res.add(s.indexOf(sb.toString()));
+            res.addAll(findMatcher(s, sb.toString()));
+            return;
         }
         for (int k = 0; k < words.length; k++) {
-            if(visited[k] || k>0 && words[k].equals(words[k-1]) && !visited[k-1]){
+            if(visited[k] || k > 0 && words[k].equals(words[k-1]) && !visited[k-1]){
                 continue;
             }
             sb.append(words[k]);
@@ -72,6 +73,23 @@ public class Item_30 {
             sb.delete(sb.length()-words[k].length(),sb.length());
             visited[k] = false;
         }
+    }
+
+    private static List<Integer> findMatcher(String s, String matcher){
+        List<Integer> list = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if(sb.length() < matcher.length()) {
+                sb.append(s.charAt(i));
+            }
+            if(sb.length() == matcher.length()){
+                if(matcher.equals(sb.toString())) {
+                    list.add(i + 1 - matcher.length());
+                }
+                sb.delete(0,1);
+            }
+        }
+        return list;
     }
 
     public static void main(String[] args) {
