@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListNode{
     int val;
     ListNode next;
@@ -34,6 +37,25 @@ public class ListNode{
             cur.next = new ListNode(arr[i]);
             cur = cur.next;
         }
+        return head;
+    }
+
+    public static ListNode generateCircle(int[] arr, int pos){
+        if(arr == null || arr.length == 0){
+            return null;
+        }
+        ListNode head = new ListNode(arr[0]);
+        //加环用
+        List<ListNode> listNodeList = new ArrayList<>();
+        listNodeList.add(head);
+        ListNode cur = head;
+        for (int i = 1; i < arr.length; i++) {
+            cur.next = new ListNode(arr[i]);
+            listNodeList.add(cur.next);
+            cur = cur.next;
+        }
+        //加环
+        listNodeList.get(arr.length-1).next = listNodeList.get(pos);
         return head;
     }
 
