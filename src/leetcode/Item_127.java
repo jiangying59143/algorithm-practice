@@ -1,36 +1,45 @@
 package leetcode;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Item_127 {
     public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        if(wordList.contains(endWord)){
+        if(!wordList.contains(endWord)){
             return 0;
         }
-        boolean[] visited = new boolean[wordList.size()];
-
-        return 0;
+        int res = process(beginWord, endWord, wordList, new boolean[wordList.size()], 0, 0);
+        return res == Integer.MAX_VALUE ? 0 : res+1;
     }
 
-    private static int process(String beginWord, String endWord, List<String> wordList,boolean[] visited, int visitSize){
+    private static int process(String beginWord, String endWord, List<String> wordList,
+                               boolean[] visited, int visitSize, int fulfillSize){
+        if(beginWord.equals(endWord)){
+            return fulfillSize;
+        }
         if(visitSize == wordList.size()){
-            return 0;
+            return Integer.MAX_VALUE;
         }
+        int sum = Integer.MAX_VALUE;
         for (int i = 0; i < wordList.size(); i++) {
-            if(beginWord.equals(endWord)){
-
+            if(visited[i]){
+               continue;
             }
-            if(!visited[i] && isdiffWithOneChar(beginWord, wordList.get(i))){
-
+            visited[i] = true;
+            visitSize = visitSize+1;
+            if(isDiffWithOneChar(beginWord, wordList.get(i))) {
+                sum = Math.min(sum, process(wordList.get(i), endWord, wordList, visited, visitSize, fulfillSize+1));
             }
+            visitSize = visitSize-1;
+            visited[i] = false;
         }
-        return 0;
+        return sum;
     }
 
-    private static boolean isdiffWithOneChar(String word1, String word2){
+    private static boolean isDiffWithOneChar(String word1, String word2){
         int diff = 0;
         for (int i = 0; i < word1.length(); i++) {
-            diff += word1.charAt(i) == word2.charAt(i) ? 1 : 0;
+            diff += word1.charAt(i) != word2.charAt(i) ? 1 : 0;
             if(diff > 1){
                 return false;
             }
@@ -44,6 +53,9 @@ public class Item_127 {
     }
 
     public static void main(String[] args) {
-
+        System.out.println(ladderLength("hit", "cog",
+                Arrays.asList("hot","dot","dog","lot","log","cog")));
+        System.out.println(ladderLength("hit", "cog",
+                Arrays.asList("hot","dot","dog","lot","log")));
     }
 }
