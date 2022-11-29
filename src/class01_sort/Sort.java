@@ -207,6 +207,29 @@ public class Sort {
         }
     }
 
+    public static void processRadix2(int[] arr, int bit){
+        int buckets[] = new int[10];
+        int[] help = new int[arr.length];
+        for (int b = 1; b <= bit; b++) {
+            for (int i = 0; i < arr.length; i++) {
+                buckets[getBitNumber(arr[i], b)]++;
+            }
+            for (int i = 1; i < buckets.length; i++) {
+                buckets[i] += buckets[i-1];
+            }
+            for (int j = arr.length-1; j >= 0; j--) {
+                help[buckets[getBitNumber(arr[j], b)]-- -1] = arr[j];
+            }
+            for (int i = 0; i < help.length; i++) {
+                arr[i] = help[i];
+            }
+
+            for (int i = 0; i < buckets.length; i++) {
+                buckets[i] = 0;
+            }
+        }
+    }
+
     public static int getBitNumber(int x, int b){
         return x / (int)Math.pow(10, b-1) % 10;
     }
