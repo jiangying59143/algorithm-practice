@@ -1,9 +1,6 @@
 package class16_graph;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Dikjtra {
     public static Map<Node, Integer> dikjtra1(Node node){
@@ -20,7 +17,6 @@ public class Dikjtra {
             }
             touchedSet.add(node);
             node = getNodeWithMinDistance(distanceMap, touchedSet);
-
         }
         return distanceMap;
     }
@@ -37,56 +33,65 @@ public class Dikjtra {
         return node;
     }
 
-    public static class Record{
+    public static Map<Node, Integer> dikjtra2(Node node){
+        DikHeap heap = new DikHeap();
+        heap.addOrUpdate(node, 0);
+        Map<Node, Integer> ansMap = new HashMap<>();
+        while(heap.nodes.size() != 0){
+            NodeRecord nodeRecord = heap.pop();
+            for (Edge edge : nodeRecord.node.edges) {
+                heap.addOrUpdate(edge.to, nodeRecord.distance + edge.weight);
+            }
+            ansMap.put(nodeRecord.node, nodeRecord.distance);
+        }
+        return ansMap;
+    }
+
+    public static class NodeRecord{
         public Node node;
         public Integer distance;
 
-        public Record(Node node, Integer distance) {
+        public NodeRecord(Node node, Integer distance) {
             this.node = node;
             this.distance = distance;
         }
     }
 
     public static class DikHeap{
-        private Node[] nodes = null;
+        private List<NodeRecord> nodes;
         private Map<Node, Integer> heapIndexMap;
-        private Map<Node, Integer> distanceMap;
-        private int heapSize;
 
-        public DikHeap(int size) {
-            nodes = new Node[size];
-            this.heapSize = 0;
+        public DikHeap() {
+            nodes = new ArrayList<>();
             heapIndexMap = new HashMap<>();
-            distanceMap = new HashMap<>();
         }
 
-        public void add(Node node, int distance){
-            // never added
+        public void addOrUpdate(Node node, int distance){
             if(heapIndexMap.containsKey(node)){
-                nodes[heapSize] = node;
-                heapIndexMap.put(node, heapSize);
-                distanceMap.put(node, distance);
-                heapSize++;
-                insert(heapSize-1);
-
-            }
-
-            if(distanceMap.containsKey(node)){
-                distanceMap.put(node, Math.min(distanceMap.get(node), distance));
-                insert(heapIndexMap.get(node));
+                int nodeIndex = heapIndexMap.get(node);
+                nodes.get(nodeIndex).distance = Math.min(nodes.get(nodeIndex).distance, distance);
+                insert(nodeIndex);
+                heapify(nodeIndex);
+            }else{
+                nodes.add(new NodeRecord(node, distance));
+                heapIndexMap.put(node, nodes.size()-1);
+                insert(nodes.size()-1);
             }
         }
 
-        public Record pop(){
-            Record record = new Record(nodes[0], distanceMap.get(nodes[0]));
-            distanceMap.remove(nodes[0]);
-            swap(0, --heapSize);
+        public NodeRecord pop(){
+            NodeRecord record = nodes.get(0);
+            swap(0, nodes.size()-1);
+            nodes.remove(nodes.size()-1);
+            heapIndexMap.remove(record.node);
+
             heapify(0);
+
             return record;
         }
 
         public void insert(int index){
-            while(distanceMap.get(nodes[index]) < distanceMap.get(nodes[(index-1)/2])){
+            while(nodes.get(index).distance < nodes.get((index-1)/2).distance){
                 swap(index, (index-1)/2);
                 index = (index-1)/2;
             }
@@ -94,25 +99,42 @@ public class Dikjtra {
 
         public void heapify(int index){
             int leftIndex = 2*index + 1;
-            while(leftIndex < heapSize){
-                int minIndex = leftIndex+1>=heapSize || distanceMap.get(nodes[leftIndex]) < distanceMap.get(nodes[leftIndex+1]) ? leftIndex : leftIndex+1;
-                if( distanceMap.get(minIndex) >= distanceMap.get(index)){
+            while(leftIndex < nodes.size()){
+                int rightIndex = leftIndex+1;
+                int minChildIndex = rightIndex>=nodes.size() || nodes.get(leftIndex).distance < nodes.get(rightIndex).distance ? leftIndex : rightIndex;
+                if(nodes.get(minChildIndex).distance >= nodes.get(index).distance){
                     break;
                 }
-                swap(minIndex, index);
-                index = minIndex;
+                swap(minChildIndex, index);
+                index = minChildIndex;
                 leftIndex = 2*index + 1;
             }
         }
 
         public void swap(int x, int y){
-            heapIndexMap.put(nodes[x], y);
-            heapIndexMap.put(nodes[y], x);
+            heapIndexMap.put(nodes.get(x).node, y);
+            heapIndexMap.put(nodes.get(y).node, x);
 
-            Node temp = nodes[x];
-            nodes[x] = nodes[y];
-            nodes[y] = nodes[x];
-
+            NodeRecord temp = nodes.get(x);
+            nodes.set(x, nodes.get(y));
+            nodes.set(y, temp);
         }
+    }
+
+    public static void print(Map<Node, Integer> map){
+        for (Map.Entry<Node, Integer> nodeDistance : map.entrySet()) {
+            System.out.print("[" + nodeDistance.getKey().value + ", " + nodeDistance.getValue() + "]");
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Node node = Node.generateRandomNodeWithEdge();
+        Map<Node, Integer> map;
+        map = dikjtra1(node);
+        print(map);
+        map = dikjtra2(node);
+        print(map);
     }
 }
