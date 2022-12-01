@@ -6,8 +6,13 @@ public class Item_5 {
 
     public static void main(String[] args) {
         Item_5 obj = new Item_5();
-        System.out.println(obj.longestPalindrome1("babad"));
-        System.out.println(obj.longestPalindrome1("cbbd"));
+        String s = "babad";
+        System.out.println(obj.longestPalindrome1(s) + " " + obj.longestPalindrome(s));
+        s = "cbbd";
+        System.out.println(obj.longestPalindrome1(s) + " " + obj.longestPalindrome(s));
+
+        System.out.println(-1 >> 1);
+        System.out.println(((0-1)/2));
     }
 
     // manacher
@@ -20,6 +25,7 @@ public class Item_5 {
         int[] parr = new int[s.length()];
         for (int i = 0; i < s.length(); i++) {
             //i-2*(i-c)
+            // r 是第一个违规的点
             parr[i] = i<r ? Math.min(parr[2*c-i], r-i) : 1;
             while(i-parr[i] >= 0 && i+parr[i] < s.length()){
                 if(s.charAt(i-parr[i]) == s.charAt(i+parr[i])){
