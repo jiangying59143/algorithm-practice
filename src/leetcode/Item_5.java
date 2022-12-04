@@ -13,6 +13,9 @@ public class Item_5 {
 
         System.out.println(-1 >> 1);
         System.out.println(((0-1)/2));
+
+        System.out.println(longestPalindrome2("babad"));
+        System.out.println(longestPalindrome2("cbbd"));
     }
 
     // manacher
@@ -72,7 +75,38 @@ public class Item_5 {
         return res;
     }
 
-    private String getSpeArr(String s){
+    public static String longestPalindrome2(String s) {
+        String manacharStr = getSpeArr(s);
+        int c = 0, r = 0, i = 0, maxCenter=0, maxArmLength = 0;
+        int[] parr = new int[manacharStr.length()];
+        while(i < manacharStr.length()){
+            parr[i] = i < r ? Math.min(parr[c - (i-c)], r-i) : 1;
+            while(i - parr[i] >= 0 && i + parr[i] < manacharStr.length()){
+                if(manacharStr.charAt(i - parr[i]) == manacharStr.charAt(i + parr[i])){
+                    parr[i]++;
+                }else{
+                    break;
+                }
+            }
+
+            if(i + parr[i]-1 >= r){
+                c = i;
+                r = i + parr[i];
+            }
+
+            if(parr[i] > maxArmLength){
+                maxCenter = i;
+                maxArmLength = parr[i];
+            }
+
+            i++;
+        }
+
+        String maxStr = manacharStr.substring(maxCenter - maxArmLength + 1, maxCenter + maxArmLength);
+        return maxStr.replace("#", "");
+    }
+
+    private static String getSpeArr(String s){
         StringBuilder sb = new StringBuilder();
         char[] arr = s.toCharArray();
         sb.append("#");
