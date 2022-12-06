@@ -17,8 +17,12 @@ public class Item_42 {
     }
 
     public static void main(String[] args) {
-        System.out.println(trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
-        System.out.println(trap(new int[]{4,2,0,3,2,5}));
-        System.out.println(trap(new int[]{5,2,1,2,1,5}));
+        int[] height;
+        height = new int[]{0,1,0,2,1,0,1,3,2,1,2,1};
+        System.out.println(trap(height) + " " + trap(height));
+        height = new int[]{4,2,0,3,2,5};
+        System.out.println(trap(height) + " " + trap(height));
+        height = new int[]{5,2,1,2,1,5};
+        System.out.println(trap(height) + " " + trap(height));
     }
 }
