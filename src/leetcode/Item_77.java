@@ -16,12 +16,12 @@ public class Item_77 {
             res.add(new ArrayList<>(list));
             return;
         }
-        if(nIndex == n+1){
+        if(n - nIndex+1 < k - list.size()){
             return;
         }
-        list.add(nIndex);
-        for (int i = nIndex+1; i <= n; i++) {
-            process(n, k, i, list, res);
+        for (int i = nIndex; i <= n; i++) {
+            list.add(i);
+            process(n, k, i+1, list, res);
             list.remove(list.size()-1);
         }
     }
