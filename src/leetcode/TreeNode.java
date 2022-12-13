@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TreeNode {
@@ -48,22 +49,43 @@ public class TreeNode {
 
     public static void printTree(TreeNode head) {
         System.out.println("Binary Tree:");
-        printInOrder(head, 0, "H", 17);
+        List<String> list = new ArrayList<>();
+        printInOrder(head, 0, "H", 17, list);
+
+        int maxLen = 0;
+        for (int i = 0; i < list.size(); i++) {
+            maxLen = Math.max(maxLen, list.get(i).length());
+        }
+
+        char[][] chars = new char[maxLen][list.size()];
+        for (int i = 0; i < maxLen; i++) {
+            for (int j = 0; j < list.size(); j++) {
+                chars[i][j] = i < list.get(j).length() ? list.get(j).charAt(i) : ' ';
+            }
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            for (int j = 0; j < chars[i].length; j++) {
+                System.out.print(chars[i][j]);
+            }
+            System.out.println();
+        }
+
         System.out.println();
     }
 
-    public static void printInOrder(TreeNode head, int height, String to, int len) {
+    public static void printInOrder(TreeNode head, int height, String to, int len, List<String> list) {
         if (head == null) {
             return;
         }
-        printInOrder(head.right, height + 1, "v", len);
+        printInOrder(head.right, height + 1, "v", len, list);
         String val = to + head.val + to;
         int lenM = val.length();
         int lenL = (len - lenM) / 2;
         int lenR = len - lenM - lenL;
         val = getSpace(lenL) + val + getSpace(lenR);
-        System.out.println(getSpace(height * len) + val);
-        printInOrder(head.left, height + 1, "^", len);
+        list.add(getSpace(height * len) + val);
+        printInOrder(head.left, height + 1, "^", len, list);
     }
 
     public static String getSpace(int num) {
