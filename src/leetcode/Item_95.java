@@ -1,7 +1,6 @@
 package leetcode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Item_95 {
@@ -31,21 +30,26 @@ public class Item_95 {
     }
 
     private static void buildTrees(int headValue, List<TreeNode> leftList, List<TreeNode> rightList, List<TreeNode> res) {
-        int li = 0, ri = 0;
-        while(leftList != null && li < leftList.size() && rightList != null && ri < rightList.size()) {
+        if(leftList != null && rightList != null ) {
+            for (int li = 0;li < leftList.size(); li++) {
+                for (int ri = 0;ri < rightList.size(); ri++) {
+                    TreeNode head = new TreeNode(headValue);
+                    head.left = leftList.get(li);
+                    head.right = rightList.get(ri);
+                    res.add(head);
+                }
+            }
+        }
+
+        int li = 0;
+        while(leftList != null && rightList == null && li < leftList.size()){
             TreeNode head = new TreeNode(headValue);
             head.left = leftList.get(li++);
-            head.right = rightList.get(ri++);
             res.add(head);
         }
 
-        while(leftList != null && li < leftList.size()){
-            TreeNode head = new TreeNode(headValue);
-            head.left = leftList.get(li++);
-            res.add(head);
-        }
-
-        while(rightList != null && ri < rightList.size()){
+        int ri = 0;
+        while(leftList == null && rightList != null && ri < rightList.size()){
             TreeNode head = new TreeNode(headValue);
             head.right = rightList.get(ri++);
             res.add(head);
