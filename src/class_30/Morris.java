@@ -4,30 +4,31 @@ import leetcode.TreeNode;
 
 public class Morris {
     public static void morrisTraversal(TreeNode cur){
+        TreeNode leftMostRight;
         while(cur != null){
-            if(cur.left == null){
-                cur = cur.right;
-            }else{
-                TreeNode leftMostRight = cur.left;
+            leftMostRight = cur.left;
+            if(cur.left != null){
                 while(leftMostRight.right != null && leftMostRight.right != cur){
                     leftMostRight = leftMostRight.right;
                 }
-
-                //第一次到
-                if(leftMostRight.right == null && leftMostRight.right != cur){
-                    System.out.println(cur.val);
-                }
-
                 if(leftMostRight.right == null){
+                    // pre order
+//                    System.out.print(cur.val + " ");
                     leftMostRight.right = cur;
                     cur = cur.left;
+                    continue;
                 }else if(leftMostRight.right == cur){
                     leftMostRight.right = null;
-                    cur = cur.right;
                 }
+            }else{
+                // pre order
+//                System.out.print(cur.val + " ");
             }
-
+            // inorder
+            System.out.print(cur.val + " ");
+            cur = cur.right;
         }
+        System.out.println();
     }
 
     public static void main(String[] args) {
