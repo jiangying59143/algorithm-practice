@@ -61,15 +61,50 @@ public class Item_99 {
         wrongNodes[1].val = temp;
     }
 
+    public static void recoverTree2(TreeNode root) {
+        TreeNode[] wrongNodes = new TreeNode[2];
+        TreeNode leftMostRight, pre = null;
+        while(root != null){
+            leftMostRight = root.left;
+            if(leftMostRight != null){
+                while(leftMostRight.right != null && leftMostRight.right != root){
+                    leftMostRight = leftMostRight.right;
+                }
+                if(leftMostRight.right == null){
+                    leftMostRight.right = root;
+                    root = root.left;
+                    continue;
+                }else{
+                    leftMostRight.right = null;
+                }
+            }
+            if(pre != null && pre.val > root.val){
+                if(wrongNodes[1] == null){
+                    wrongNodes[0] = pre;
+                    wrongNodes[1] = root;
+                }else{
+                    wrongNodes[1] = root;
+                }
+            }
+            pre = root;
+            root = root.right;
+        }
+        int temp = wrongNodes[0].val;
+        wrongNodes[0].val = wrongNodes[1].val;
+        wrongNodes[1].val = temp;
+    }
+
     public static void main(String[] args) {
         TreeNode root;
         root = TreeNode.generate(new Integer[]{1, 3, null, null, 2});
         TreeNode.print(root);
-        recoverTree1(root);
+        recoverTree2(root);
         TreeNode.print(root);
 
+        System.out.println("----------------------------");
         root = TreeNode.generate(new Integer[]{3,1,4,null,null,2});
-        recoverTree1(root);
+        TreeNode.print(root);
+        recoverTree2(root);
         TreeNode.print(root);
     }
 }
