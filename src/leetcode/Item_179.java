@@ -8,22 +8,23 @@ public class Item_179 {
         return sb.toString();
     }
 
-    public static int getBitCount(int n){
+
+
+    private static int getBitCount(int n){
         while(n / 10 != 0){
             n = n/10;
         }
         return n;
     }
 
-    public static int getBit(int n, int bit){
-        while(n / 10 != 0){
-            n = n/10;
+    private static int getBit(int n, int bit){
+        if(n / (int)(Math.pow(10, bit-1)) == 0){
+            return -1;
         }
-        return n;
+        return n / (int)(Math.pow(10, bit-1)) % 10;
     }
 
     public static void main(String[] args) {
-//        System.out.println(getFirstBit(501));
-//        System.out.println(getFirstBit(3));
+        System.out.println(getBit(101, 1));
     }
 }

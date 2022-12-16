@@ -1,7 +1,6 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Item_138 {
 
@@ -31,6 +30,23 @@ public class Item_138 {
             }
             return list.get(0);
         }
+
+        public static void print(Node node){
+            Map<Node, Integer> map = new HashMap<>();
+            int i = 0;
+            Node head = node;
+            while(node != null){
+                map.put(node, i++);
+                node = node.next;
+            }
+            node = head;
+            while(node != null){
+                System.out.print("[" + node.val + ","
+                        + (node.random == null ? "null" : map.get(node.random)) + "]");
+                node = node.next;
+            }
+            System.out.println();
+        }
     }
 
     public static Node copyRandomList(Node head) {
@@ -40,7 +56,7 @@ public class Item_138 {
         Node cur = head, curNext, randomNext;
 
         // in case of loop create
-        List<Node> nodesCreated = new ArrayList<>();
+        Set<Node> nodesCreated = new HashSet<>();
         while(cur != null){
             Node copyNode;
             if(nodesCreated.contains(cur)){
@@ -53,32 +69,95 @@ public class Item_138 {
                 copyNode.next = curNext;
                 nodesCreated.add(cur);
             }
-            cur = curNext.next;
-            if(cur.random == null) {
-                continue;
+            if(cur.random != null) {
+                if (nodesCreated.contains(cur.random)) {
+                    copyNode.random = cur.random.next;
+                } else {
+                    randomNext = cur.random.next;
+                    Node copyRandom = new Node(cur.random.val);
+                    cur.random.next = copyRandom;
+                    copyRandom.next = randomNext;
+                    copyNode.random = copyRandom;
+                    nodesCreated.add(cur.random);
+                }
             }
-            if(nodesCreated.contains(cur.random)) {
-                copyNode.random = cur.random.next;
-            }else {
-                randomNext = cur.random.next;
-                Node copyRandom = new Node(cur.random.val);
-                cur.random.next = copyRandom;
-                copyRandom.next = randomNext;
-                nodesCreated.add(cur.random);
-            }
+            cur = curNext;
         }
-
-        Node ans = nodesCreated.get(0).next;
-        for (int i = 0; i < nodesCreated.size(); i++) {
-            curNext = nodesCreated.get(i).next;
-            nodesCreated.get(i).next = nodesCreated.get(i).next.next;
-            curNext.next = nodesCreated.get(i).next.next;
+        Node ans = head.next;
+        cur = head;
+        curNext = head.next;
+        while(cur != null){
+            if(cur.next != null) {
+                cur.next = cur.next.next;
+            }
+            if(curNext.next != null) {
+                curNext.next = curNext.next.next;
+            }
+            cur = cur.next;
+            curNext = curNext.next;
         }
 
         return ans;
     }
 
+    public static Node copyRandomList1(Node head) {
+        if(head == null){
+            return null;
+        }
+        Node cur = head, curNext;
+
+        while(cur != null){
+            curNext = cur.next;
+            Node copyNode = new Node(cur.val);
+            cur.next = copyNode;
+            copyNode.next = curNext;
+            cur = curNext;
+        }
+        cur = head;
+        while(cur != null){
+            if(cur.random != null) {
+                cur.next.random = cur.random.next;
+            }
+            cur = cur.next.next;
+        }
+
+        Node ans = head.next;
+        cur = head;
+        curNext = head.next;
+        while(cur != null){
+            if(cur.next != null) {
+                cur.next = cur.next.next;
+            }
+            if(curNext.next != null) {
+                curNext.next = curNext.next.next;
+            }
+            cur = cur.next;
+            curNext = curNext.next;
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
+        Integer[][] arr;
+        Node head, copyHead;
+
+        arr = new Integer[][]{{7,null},{13,0},{11,4},{10,2},{1,0}};
+        head = Node.generate(arr);
+        Node.print(head);
+        copyHead = copyRandomList1(head);
+        Node.print(copyHead);
+
+        arr = new Integer[][]{{1,1},{2,1}};
+        head = Node.generate(arr);
+        Node.print(head);
+        copyHead = copyRandomList1(head);
+        Node.print(copyHead);
+
+        arr = new Integer[][]{{3,null},{3,0},{3,null}};
+        head = Node.generate(arr);
+        Node.print(head);
+        copyHead = copyRandomList1(head);
+        Node.print(copyHead);
 
     }
 }
