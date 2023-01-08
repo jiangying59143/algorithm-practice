@@ -6,11 +6,12 @@ package leetcode;
 public class Item_50 {
 
     public static double myPow(double x, int n){
+        // it would return 1 if x^0
         if(n == 0){
             return 1D;
         }
         double ans = 1D;
-        int pow = n == Integer.MIN_VALUE ? n+1 : n;
+        int pow = (n == Integer.MIN_VALUE ? n+1 : n);
 
         if(pow < 0){
             pow = -pow;

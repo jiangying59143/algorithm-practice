@@ -1,7 +1,26 @@
 package leetcode;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Item_179 {
     public static String largestNumber(int[] nums) {
+        String[] numStrs = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            numStrs[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(numStrs, (o1, o2) -> (o2+o1).compareTo(o1+o2));
+        if(numStrs[0].equals("0")){
+            return "0";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numStrs.length; i++) {
+            sb.append(numStrs[i]);
+        }
+        return sb.toString();
+    }
+
+    public static String largestNumber0(int[] nums) {
         for (int num : nums) {
         }
         StringBuilder sb = new StringBuilder();
@@ -25,6 +44,8 @@ public class Item_179 {
     }
 
     public static void main(String[] args) {
-        System.out.println(getBit(101, 1));
+        int[] nums;
+        nums = new int[]{3,30,34,5,9};
+        System.out.println(largestNumber(nums));
     }
 }
