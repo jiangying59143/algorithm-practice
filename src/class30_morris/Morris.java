@@ -1,4 +1,4 @@
-package class_30;
+package class30_morris;
 
 import leetcode.TreeNode;
 
