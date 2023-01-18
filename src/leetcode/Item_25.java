@@ -4,6 +4,47 @@ import java.util.LinkedList;
 
 public class Item_25 {
     public static ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummyHead = new ListNode();
+        dummyHead.next = head;
+        ListNode[] headTailNext;
+        ListNode prev = dummyHead, next = head;
+        while(next != null){
+            headTailNext = reverse(next, k);
+            prev.next = headTailNext[0];
+            prev = headTailNext[1];
+            next = headTailNext[2];
+        }
+
+        return dummyHead.next;
+    }
+
+    /**
+     *
+     * @param node
+     * @param k
+     * @return head tail and next head.
+     */
+    private static ListNode[] reverse(ListNode node, int k) {
+        ListNode tail = node, next = null, prev = null;
+        int count = 1;
+        while(count <= k){
+            // at last, if left nodes are less than k, need to revert it back.
+            if(node == null){
+                return reverse(prev, count-1);
+            }
+            next = node.next;
+            node.next = prev;
+            prev = node;
+            node = next;
+            count++;
+        }
+
+        return new ListNode[]{prev, tail, next};
+    }
+
+
+
+    public static ListNode reverseKGroup0(ListNode head, int k) {
         int count = 0;
         ListNode headFake = new ListNode(0);
         headFake.next = head;
@@ -58,7 +99,7 @@ public class Item_25 {
 
     public static void main(String[] args) {
         ListNode res;
-        res= reverseKGroup(ListNode.generate(new int[]{1,2,3,4,5}), 1);
+        res= reverseKGroup0(ListNode.generate(new int[]{1,2,3,4,5}), 1);
         ListNode.print(res);
         res= reverseKGroup(ListNode.generate(new int[]{1,2,3,4,5}), 2);
         ListNode.print(res);
