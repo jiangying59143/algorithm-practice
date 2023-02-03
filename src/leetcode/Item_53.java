@@ -36,4 +36,39 @@ public class Item_53 {
         return new Status(isum, lsum, rsum, msum);
     }
 
+    /**
+     * lSum 表示 [l,r] 内以 l 为左端点的最大子段和
+     * rSum 表示 [l,r] 内以 r 为右端点的最大子段和
+     * mSum 表示 [l,r] 内的最大子段和
+     * iSum 表示 [l,r] 的区间和
+     *
+     * @param nums
+     * @return
+     */
+    public static int maxSubArray1(int[] nums) {
+        int sum = 0, max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            sum = Math.max(0, sum);
+            sum = num + sum;
+            max = Math.max(sum, max);
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[] nums;
+
+        nums = new int[]{-2,1,-3,4,-1,2,1,-5,4};
+        System.out.println(maxSubArray(nums));
+        System.out.println(maxSubArray1(nums));
+
+        nums = new int[]{1};
+        System.out.println(maxSubArray(nums));
+        System.out.println(maxSubArray1(nums));
+
+        nums = new int[]{5,4,-1,7,8};
+        System.out.println(maxSubArray(nums));
+        System.out.println(maxSubArray1(nums));
+    }
+
 }
