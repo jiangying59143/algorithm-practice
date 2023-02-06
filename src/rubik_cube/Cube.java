@@ -1,7 +1,7 @@
 package rubik_cube;
 
 public class Cube {
-    public static Item[][][] items = new Item[][][]{
+    public Item[][][] items = new Item[][][]{
             {//FRONT
                     {new Item(1, Aspect.F), new Item(2, Aspect.F), new Item(3, Aspect.F)},
                     {new Item(4, Aspect.F), new Item(5, Aspect.F), new Item(6, Aspect.F)},
@@ -34,13 +34,15 @@ public class Cube {
             }
     };
 
-    public static boolean isCompleted(){
+    public Cube() {
+
+    }
+
+    public boolean isCompleted(){
         for (int i = 0; i < items.length; i++) {
             for (int j = 0; j < items[i].length; j++) {
                 for (int k = 0; k < items[i][j].length; k++) {
-                    if(!(items[i][j][k].aspect.getIndex() == i && items[i][j][k].isPositive())){
-//                        System.out.println(items[i][j][k].number);
-//                        System.out.println(items[i][j][k].dir);
+                    if(!(items[i][j][k].aspect.index == i && items[i][j][k].isPositive())){
                         return false;
                     }
                 }
@@ -49,7 +51,7 @@ public class Cube {
         return true;
     }
 
-    public static void print(){
+    public void print(){
         for (int line = 0; line < 3; line++) {
             for (int i = 0; i < items.length; i++) {
                 for (int j = 0; j < items[i][line].length; j++) {
@@ -62,7 +64,8 @@ public class Cube {
     }
 
     public static void main(String[] args) {
-        print();
-        System.out.println(isCompleted());
+        Cube cube = new Cube();
+        cube.print();
+        System.out.println(cube.isCompleted());
     }
 }

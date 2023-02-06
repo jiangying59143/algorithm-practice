@@ -8,13 +8,9 @@ public enum Aspect {
     D(4),
     B(5);
 
-    private int index;
+    public int index;
 
     Aspect(int i) {
         this.index = i;
-    }
-
-    public int getIndex(){
-        return index;
     }
 }

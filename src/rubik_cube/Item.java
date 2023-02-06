@@ -3,6 +3,7 @@ package rubik_cube;
 public class Item {
     public int number;
     public Aspect aspect;
+    public Aspect currentAspect;
     public Direction dir = Direction.P;
 
     public Item(int number) {
@@ -17,6 +18,7 @@ public class Item {
     public Item(int number, Aspect aspect) {
         this.number = number;
         this.aspect = aspect;
+        this.currentAspect = aspect;
     }
 
     public Item(int number, Aspect aspect, Direction dir) {
@@ -30,46 +32,7 @@ public class Item {
     }
 
     public Direction getNextDir(Operation op){
-        switch (dir) {
-            case P:
-                switch (op) {
-                    case CLOCKWISE:
-                        return Direction.R;
-                    case ANTI_CLOCKWISE:
-                        return Direction.L;
-                    case REVERSE:
-                        return Direction.N;
-                }
-            case N:
-                switch (op) {
-                    case CLOCKWISE:
-                        return Direction.L;
-                    case ANTI_CLOCKWISE:
-                        return Direction.R;
-                    case REVERSE:
-                        return Direction.P;
-                }
-            case R:
-                switch (op) {
-                    case CLOCKWISE:
-                        return Direction.N;
-                    case ANTI_CLOCKWISE:
-                        return Direction.P;
-                    case REVERSE:
-                        return Direction.R;
-                }
-            case L:
-                switch (op) {
-                    case CLOCKWISE:
-                        return Direction.P;
-                    case ANTI_CLOCKWISE:
-                        return Direction.N;
-                    case REVERSE:
-                        return Direction.L;
-                }
-        }
-
-        return dir;
+        return dir.getDirection(op.angle);
     }
 
     @Override
