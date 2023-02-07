@@ -49,14 +49,63 @@ public class Cube {
                     {Arrays.asList(new Position(2, 0, 2), new Position(4, 2, 0)),
                             Arrays.asList(new Position(1, 2, 1)),
                             Arrays.asList(new Position(1, 2, 2), new Position(3, 0, 0))},
+            },
+            {
+                    {Arrays.asList(new Position(2, 0, 1), new Position(5, 0, 2)),
+                            Arrays.asList(new Position(5, 0, 1)),
+                            Arrays.asList(new Position(5, 0, 2), new Position(3, 0, 2))},
+                    {Arrays.asList(new Position(2, 0, 1)),
+                            new ArrayList(),
+                            Arrays.asList(new Position(3, 0, 1))},
+                    {Arrays.asList(new Position(2, 0, 2), new Position(0, 0, 0)),
+                            Arrays.asList(new Position(0, 0, 1)),
+                            Arrays.asList(new Position(0, 0, 2), new Position(3, 0, 0))},
+            },
+            {
+                    {Arrays.asList(new Position(5, 0, 2), new Position(1, 0, 0)),
+                            Arrays.asList(new Position(1, 1, 0)),
+                            Arrays.asList(new Position(1, 2, 0), new Position(0, 0, 0))},
+                    {Arrays.asList(new Position(5, 1, 2)),
+                            new ArrayList(),
+                            Arrays.asList(new Position(0, 1, 0))},
+                    {Arrays.asList(new Position(5, 2, 2), new Position(4, 2, 0)),
+                            Arrays.asList(new Position(4, 1, 0)),
+                            Arrays.asList(new Position(4, 0, 0), new Position(0, 2, 0))},
+            },
+            {
+                    {Arrays.asList(new Position(0, 0, 2), new Position(1, 2, 2)),
+                            Arrays.asList(new Position(1, 1, 2)),
+                            Arrays.asList(new Position(1, 0, 2), new Position(5, 0, 0))},
+                    {Arrays.asList(new Position(0, 1, 2)),
+                            new ArrayList(),
+                            Arrays.asList(new Position(5, 1, 0))},
+                    {Arrays.asList(new Position(0, 2, 2), new Position(4, 0, 2)),
+                            Arrays.asList(new Position(4, 1, 2)),
+                            Arrays.asList(new Position(4, 2, 2), new Position(5, 2, 0))},
+            },
+            {
+                    {Arrays.asList(new Position(0, 2, 0), new Position(1, 2, 2)),
+                            Arrays.asList(new Position(0, 2, 1)),
+                            Arrays.asList(new Position(0, 2, 2), new Position(3, 2, 0))},
+                    {Arrays.asList(new Position(2, 2, 1)),
+                            new ArrayList(),
+                            Arrays.asList(new Position(3, 2, 1))},
+                    {Arrays.asList(new Position(2, 2, 0), new Position(5, 2, 2)),
+                            Arrays.asList(new Position(5, 2, 1)),
+                            Arrays.asList(new Position(5, 2, 1), new Position(3, 2, 2))},
+            },
+            {
+                    {Arrays.asList(new Position(1, 0, 2), new Position(3, 0, 2)),
+                            Arrays.asList(new Position(1, 0, 1)),
+                            Arrays.asList(new Position(1, 0, 0), new Position(1, 0, 0))},
+                    {Arrays.asList(new Position(3, 1, 2)),
+                            new ArrayList(),
+                            Arrays.asList(new Position(2, 1, 0))},
+                    {Arrays.asList(new Position(4, 2, 2), new Position(3, 2, 2)),
+                            Arrays.asList(new Position(4, 2, 1)),
+                            Arrays.asList(new Position(4, 2, 0), new Position(2, 2, 0))},
             }
     };
-
-    public Cube() {
-        for (int i = 0; i < items.length; i++) {
-            
-        }
-    }
 
     public boolean isCompleted(){
         for (int i = 0; i < items.length; i++) {
