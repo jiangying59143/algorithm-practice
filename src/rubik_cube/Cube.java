@@ -111,7 +111,9 @@ public class Cube {
         for (int i = 0; i < items.length; i++) {
             for (int j = 0; j < items[i].length; j++) {
                 for (int k = 0; k < items[i][j].length; k++) {
-                    if(!(items[i][j][k].aspect.index == i && items[i][j][k].isPositive())){
+                    if(!(items[i][j][k].currentAspect.index == items[i][j][k].aspect.index
+//                            && items[i][j][k].isPositive()
+                    )){
                         return false;
                     }
                 }
