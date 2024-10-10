@@ -9,10 +9,9 @@ public class TreeNode<T>{
         this.val = val;
         children = new ArrayList<>();
     }
-    public TreeNode<T> addChild(T child){
-        var c = new TreeNode<T>(child);
-        children.add(c);
-        return c;
+    public TreeNode<T> addChild(TreeNode<T> child){
+        children.add(child);
+        return child;
     }
     public T getValue(){ return this.val; }
     public ArrayList<TreeNode<T>> getChildren() { return this.children; }
