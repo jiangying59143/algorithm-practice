@@ -35,13 +35,9 @@ public class RadixSort {
             for (int i = arr.length-1; i >= 0; i--) {
                 help[buckets[getBitNumber(arr[i], b)]-- -1] = arr[i];
             }
-            for (int i = 0; i < help.length; i++) {
-                arr[i] = help[i];
-            }
+            System.arraycopy(help, 0, arr, 0, help.length);
 
-            for (int i = 0; i < buckets.length; i++) {
-                buckets[i] = 0;
-            }
+            Arrays.fill(buckets, 0);
 
             System.out.println("-----------");
             System.out.println(Arrays.toString(arr));
